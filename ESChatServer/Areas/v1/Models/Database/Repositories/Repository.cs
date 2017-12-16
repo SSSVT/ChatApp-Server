@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using ESChatServer.Areas.v1.Models.Database.Interfaces;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ESChatServer.Areas.v1.Models.Database.Repositories
 {
-    public abstract class Repository<T>
+    public abstract class Repository<T> : IRepository<T>
     {
         public Repository(DatabaseContext context)
         {
@@ -10,15 +12,25 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
         }
 
         protected DatabaseContext _DatabaseContext { get; set; }
-        internal virtual void SaveChanges()
+
+        public abstract void Add(T item, bool saveChanges);
+        public abstract Task AddAsync(T item, bool saveChanges);
+        public abstract T Find(object id);
+        public abstract Task<T> FindAsync(object id);
+        public abstract ICollection<T> FindAll();
+        public abstract Task<List<T>> FindAllAsync();        
+        public abstract void Remove(T item, bool saveChanges);
+        public abstract Task RemoveAsync(T item, bool saveChanges);
+        public abstract void Update(T item, bool saveChanges);
+        public abstract Task UpdateAsync(T item, bool saveChanges);
+
+        public virtual void SaveChanges()
         {
             this._DatabaseContext.SaveChanges();
         }
-
-        internal abstract T Find(object id);
-        internal abstract ICollection<T> FindAll();
-        protected abstract void Add(T item, bool saveChanges);
-        internal abstract void Remove(T item, bool saveChanges);
-        internal abstract void Update(T item, bool saveChanges);
+        public virtual async Task SaveChangesAsync()
+        {
+            await this._DatabaseContext.SaveChangesAsync();
+        }
     }
 }
