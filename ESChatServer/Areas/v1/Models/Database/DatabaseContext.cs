@@ -85,40 +85,19 @@ namespace ESChatServer.Areas.v1.Models.Database
                 .Property(x => x.ID)
                 .HasColumnName("ID");
             modelBuilder.Entity<User>()
-                .HasKey(x => x.ID);            
-            modelBuilder.Entity<User>()
-                .Property(x => x.ID)
-                .IsRequired();
-            modelBuilder.Entity<User>()
-                .Property(x => x.ID)
-                .ValueGeneratedOnAdd();
+                .HasKey(x => x.ID);
 
             modelBuilder.Entity<User>()
                 .Property(x => x.FirstName)
                 .HasColumnName("FIRST_NAME");
-            modelBuilder.Entity<User>()
-                .Property(x => x.FirstName)
-                .HasMaxLength(64);
-            modelBuilder.Entity<User>()
-                .Property(x => x.FirstName)
-                .IsRequired();
 
             modelBuilder.Entity<User>()
                 .Property(x => x.MiddleName)
                 .HasColumnName("MIDDLE_NAME");
-            modelBuilder.Entity<User>()
-                .Property(x => x.MiddleName)
-                .HasMaxLength(64);
 
             modelBuilder.Entity<User>()
                 .Property(x => x.LastName)
                 .HasColumnName("LAST_NAME");
-            modelBuilder.Entity<User>()
-                .Property(x => x.LastName)
-                .HasMaxLength(64);
-            modelBuilder.Entity<User>()
-                .Property(x => x.LastName)
-                .IsRequired();
 
             modelBuilder.Entity<User>()
                 .Property(x => x.Birthday)
@@ -126,9 +105,6 @@ namespace ESChatServer.Areas.v1.Models.Database
             modelBuilder.Entity<User>()
                 .Property(x => x.Birthday)
                 .HasColumnType("date");
-            modelBuilder.Entity<User>()
-                .Property(x => x.Birthday)
-                .IsRequired();
 
             modelBuilder.Entity<User>()
                 .Property(x => x.Gender)
@@ -136,52 +112,22 @@ namespace ESChatServer.Areas.v1.Models.Database
             modelBuilder.Entity<User>()
                 .Property(x => x.Gender)
                 .HasColumnType("char(1)");
-            modelBuilder.Entity<User>()
-                .Property(x => x.Gender)
-                .HasMaxLength(1);
-            modelBuilder.Entity<User>()
-                .Property(x => x.Gender)
-                .IsRequired();
 
             modelBuilder.Entity<User>()
                 .Property(x => x.Username)
                 .HasColumnName("USERNAME");
-            modelBuilder.Entity<User>()
-                .Property(x => x.Username)
-                .HasMaxLength(64);
-            modelBuilder.Entity<User>()
-                .Property(x => x.Username)
-                .IsRequired();
 
             modelBuilder.Entity<User>()
                 .Property(x => x.PasswordHash)
                 .HasColumnName("PSWD_HASH");
-            modelBuilder.Entity<User>()
-                .Property(x => x.PasswordHash)
-                .HasMaxLength(2048);
-            modelBuilder.Entity<User>()
-                .Property(x => x.PasswordHash)
-                .IsRequired();
 
             modelBuilder.Entity<User>()
                 .Property(x => x.PasswordSalt)
                 .HasColumnName("PSWD_SALT");
-            modelBuilder.Entity<User>()
-                .Property(x => x.PasswordSalt)
-                .HasMaxLength(2048);
-            modelBuilder.Entity<User>()
-                .Property(x => x.PasswordSalt)
-                .IsRequired();
 
             modelBuilder.Entity<User>()
                 .Property(x => x.UTCRegistrationDate)
-                .HasColumnName("REGISTERED_ON_UTC");                
-            modelBuilder.Entity<User>()
-                .Property(x => x.UTCRegistrationDate)
-                .IsRequired();
-            modelBuilder.Entity<User>()
-                .Property(x => x.UTCRegistrationDate)
-                .ValueGeneratedOnAdd();
+                .HasColumnName("REGISTERED_ON_UTC");
             modelBuilder.Entity<User>()
                 .Property(x => x.UTCRegistrationDate)
                 .HasDefaultValue(DateTime.UtcNow);
