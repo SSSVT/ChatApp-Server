@@ -103,7 +103,7 @@ namespace ESChatServer.Areas.v1.Controllers
                     return BadRequest(ModelState);
                 }
 
-                return Ok(this.IsUsernameAvailable(id));
+                return Ok(this._IsUsernameAvailable(id));
             }
             catch (Exception ex)
             {
