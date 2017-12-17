@@ -26,19 +26,10 @@ namespace ESChatServer.Areas.v1.Models.Database
                 .HasColumnName("ID");
             modelBuilder.Entity<Login>()
                 .HasKey(x => x.ID);
-            modelBuilder.Entity<Login>()
-                .Property(x => x.ID)
-                .IsRequired();
-            modelBuilder.Entity<Login>()
-                .Property(x => x.ID)
-                .ValueGeneratedOnAdd();
 
             modelBuilder.Entity<Login>()
                 .Property(x => x.IDUser)
                 .HasColumnName("IDes_tbUsers");
-            modelBuilder.Entity<Login>()
-                .Property(x => x.IDUser)
-                .IsRequired();
 
             modelBuilder.Entity<Login>()
                 .Property(x => x.UTCLoginTime)
@@ -46,9 +37,6 @@ namespace ESChatServer.Areas.v1.Models.Database
             modelBuilder.Entity<Login>()
                 .Property(x => x.UTCLoginTime)
                 .HasDefaultValue(DateTime.UtcNow);
-            modelBuilder.Entity<Login>()
-                .Property(x => x.UTCLoginTime)
-                .IsRequired();
 
             modelBuilder.Entity<Login>()
                 .Property(x => x.UTCLogoutTime)
@@ -57,22 +45,10 @@ namespace ESChatServer.Areas.v1.Models.Database
             modelBuilder.Entity<Login>()
                 .Property(x => x.UserAgent)
                 .HasColumnName("USER_AGENT");
-            modelBuilder.Entity<Login>()
-                .Property(x => x.UserAgent)
-                .HasMaxLength(256);
-            modelBuilder.Entity<Login>()
-                .Property(x => x.UserAgent)
-                .IsRequired();
 
             modelBuilder.Entity<Login>()
                 .Property(x => x.IPAddress)
                 .HasColumnName("USER_IP");
-            modelBuilder.Entity<Login>()
-                .Property(x => x.IPAddress)
-                .HasMaxLength(15);
-            modelBuilder.Entity<Login>()
-                .Property(x => x.IPAddress)
-                .IsRequired();
 
             modelBuilder.Entity<Login>()
                 .HasOne(l => l.User)

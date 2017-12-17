@@ -33,9 +33,11 @@ namespace ESChatServer.Areas.v1.Models.Database.Entities
 
         [Required, MaxLength(64)]
         public string Username { get; set; }
+
         [JsonIgnore]
         [Required, MaxLength(2048)]
         public string PasswordHash { get; set; }
+
         [JsonIgnore]
         [Required, MaxLength(2048)]
         public string PasswordSalt { get; set; }
