@@ -12,13 +12,18 @@ namespace ESChatServer.Areas.v1.Models.Database
         }
 
         #region DbSets
+        public DbSet<Login> Logins { get; set; }
+        public DbSet<Room> Rooms { get; set; }
         public DbSet<User> Users { get; set; }
         #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Login>().ToTable("es_tbLogins");
-            modelBuilder.Entity<User>().ToTable("es_tbUsers");
+            modelBuilder.Entity<Message>().ToTable("es_tbMessages");
+            modelBuilder.Entity<Participant>().ToTable("es_tbRoomParticipants");
+            modelBuilder.Entity<Room>().ToTable("es_tbRooms");
+            modelBuilder.Entity<User>().ToTable("es_tbUsers");            
 
             #region Login
             modelBuilder.Entity<Login>()
@@ -26,6 +31,9 @@ namespace ESChatServer.Areas.v1.Models.Database
                 .HasColumnName("ID");
             modelBuilder.Entity<Login>()
                 .HasKey(x => x.ID);
+            modelBuilder.Entity<Login>()
+                .Property(x => x.ID)
+                .ValueGeneratedOnAdd();
 
             modelBuilder.Entity<Login>()
                 .Property(x => x.IDUser)
@@ -56,12 +64,88 @@ namespace ESChatServer.Areas.v1.Models.Database
                 .HasForeignKey(l => l.IDUser)
                 .HasConstraintName("FK_es_tbLogins_IDes_tbUsers");
             #endregion
+            #region Message
+
+            #endregion
+            #region Participant
+            modelBuilder.Entity<Participant>()
+                .Property(x => x.ID)
+                .HasColumnName("ID");
+            modelBuilder.Entity<Participant>()
+                .HasKey(x => x.ID);
+            modelBuilder.Entity<Participant>()
+                .Property(x => x.ID)
+                .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<Participant>()
+                .Property(x => x.IDRoom)
+                .HasColumnName("IDes_tbRooms");
+
+            modelBuilder.Entity<Participant>()
+                .Property(x => x.IDUser)
+                .HasColumnName("IDes_tbUsers");
+
+            modelBuilder.Entity<Participant>()
+                .Property(x => x.UTCJoinDate)
+                .HasColumnName("JOIN_DATE_UTC");
+
+            modelBuilder.Entity<Participant>()
+                .Property(x => x.UTCLeftDate)
+                .HasColumnName("LEFT_DATE_UTC");
+
+            modelBuilder.Entity<Participant>()
+                .HasOne(p => p.Room)
+                .WithMany(r => r.Participants)
+                .HasForeignKey(p => p.IDRoom)
+                .HasConstraintName("FK_es_tbRoomParticipants_IDes_tbRooms");
+
+            modelBuilder.Entity<Participant>()
+                .HasOne(p => p.User)
+                .WithMany(u => u.Participants)
+                .HasForeignKey(p => p.IDUser)
+                .HasConstraintName("FK_es_tbRoomParticipants_IDes_tbUsers");
+            #endregion
+            #region Room
+            modelBuilder.Entity<Room>()
+                .Property(x => x.ID)
+                .HasColumnName("ID");
+            modelBuilder.Entity<Room>()
+                .HasKey(x => x.ID);
+            modelBuilder.Entity<Room>()
+                .Property(x => x.ID)
+                .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<Room>()
+                .Property(x => x.IDOwner)
+                .HasColumnName("IDes_tbUsers");
+
+            modelBuilder.Entity<Room>()
+                .Property(x => x.Name)
+                .HasColumnName("ROOM_NAME");
+
+            modelBuilder.Entity<Room>()
+                .Property(x => x.Description)
+                .HasColumnName("ROOM_DESCRIPTION");
+
+            modelBuilder.Entity<Room>()
+                .Property(x => x.UTCCreationDate)
+                .HasColumnName("ROOM_CREATED_UTC");
+
+            modelBuilder.Entity<Room>()
+                .HasOne(r => r.Owner)
+                .WithMany(u => u.OwnedRooms)
+                .HasForeignKey(r => r.IDOwner)
+                .HasConstraintName("FK_es_tbRooms_IDes_tbUsers");
+            #endregion
             #region User
             modelBuilder.Entity<User>()
                 .Property(x => x.ID)
                 .HasColumnName("ID");
             modelBuilder.Entity<User>()
                 .HasKey(x => x.ID);
+            modelBuilder.Entity<User>()
+                .Property(x => x.ID)
+                .ValueGeneratedOnAdd();
 
             modelBuilder.Entity<User>()
                 .Property(x => x.FirstName)

@@ -51,7 +51,7 @@ namespace ESChatServer.Areas.v1.Controllers
                 };
                 this._usersRepository.Add(user, true);
 
-                return Ok();
+                return NoContent();
             }
             catch (Exception ex)
             {
@@ -84,7 +84,7 @@ namespace ESChatServer.Areas.v1.Controllers
                 };
                 await this._usersRepository.AddAsync(user, true);
 
-                return Ok();
+                return NoContent();
             }
             catch (Exception ex)
             {

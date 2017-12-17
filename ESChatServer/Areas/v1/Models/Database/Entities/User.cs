@@ -9,7 +9,7 @@ namespace ESChatServer.Areas.v1.Models.Database.Entities
     public class User
     {
         [JsonIgnore]
-        [Required, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Required]
         public long ID { get; set; }
 
         [Required, MaxLength(64)]
@@ -42,9 +42,11 @@ namespace ESChatServer.Areas.v1.Models.Database.Entities
         [Required, MaxLength(2048)]
         public string PasswordSalt { get; set; }
 
-        [Required, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Required]
         public DateTime UTCRegistrationDate { get; set; }
 
         public ICollection<Login> Logins { get; set; }
+        public ICollection<Room> OwnedRooms { get; set; }
+        public ICollection<Participant> Participants { get; set; }
     }
 }

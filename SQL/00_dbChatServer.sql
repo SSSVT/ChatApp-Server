@@ -44,10 +44,47 @@ CREATE TABLE [es_tbLogins](
 	USER_IP nvarchar(15) not null
 );
 ALTER TABLE [es_tbLogins] ADD CONSTRAINT PK_es_tbLogins_ID PRIMARY KEY NONCLUSTERED (ID);
+ALTER TABLE [es_tbLogins] ADD CONSTRAINT DF_es_tbLogins_ID DEFAULT (NEWID()) FOR ID;
 CREATE INDEX IX_es_tbLogins_IDes_tbUsers ON [es_tbLogins](ID);
 ALTER TABLE [es_tbLogins] ADD CONSTRAINT DF_es_tbLogins_LOGIN_TIME_UTC DEFAULT (GETUTCDATE()) FOR LOGIN_TIME_UTC;
 ALTER TABLE [es_tbLogins] ADD CONSTRAINT CK_es_tbLogins_LOGIN_TIME_UTC CHECK (LOGIN_TIME_UTC <= GETUTCDATE());
 ALTER TABLE [es_tbLogins] ADD CONSTRAINT CK_es_tbLogins_LOGOUT_TIME_UTC CHECK (LOGIN_TIME_UTC < LOGOUT_TIME_UTC);
 
+CREATE TABLE [es_tbRooms](
+	ID bigint identity(1,1) not null,
+	IDes_tbUsers bigint not null,
+	ROOM_NAME nvarchar(64) not null,
+	ROOM_DESCRIPTION nvarchar(256),
+	ROOM_CREATED_UTC datetime not null
+);
+ALTER TABLE [es_tbRooms] ADD CONSTRAINT PK_es_tbRooms_ID PRIMARY KEY (ID);
+ALTER TABLE [es_tbRooms] ADD CONSTRAINT CK_es_tbRooms_ROOM_CREATED_UTC CHECK (ROOM_CREATED_UTC <= GETUTCDATE());
+
+CREATE TABLE [es_tbRoomParticipants](
+	ID uniqueidentifier not null,
+	IDes_tbRooms bigint not null,
+	IDes_tbUsers bigint not null,
+	JOIN_DATE_UTC datetime not null,
+	LEFT_DATE_UTC datetime
+);
+ALTER TABLE [es_tbRoomParticipants] ADD CONSTRAINT PK_es_tbRoomParticipants_ID PRIMARY KEY NONCLUSTERED (ID);
+ALTER TABLE [es_tbRoomParticipants] ADD CONSTRAINT DF_es_tbRoomParticipants_ID DEFAULT (NEWID()) FOR ID;
+ALTER TABLE [es_tbRoomParticipants] ADD CONSTRAINT CK_es_tbRoomParticipants_JOIN_DATE_UTC CHECK (JOIN_DATE_UTC <= GETUTCDATE());
+ALTER TABLE [es_tbRoomParticipants] ADD CONSTRAINT CK_es_tbRoomParticipants_LEFT_DATE_UTC CHECK (JOIN_DATE_UTC < LEFT_DATE_UTC AND LEFT_DATE_UTC <= GETUTCDATE());
+
+CREATE TABLE [es_tbMessages](
+	ID uniqueidentifier not null,
+	IDes_tbRooms bigint not null,
+	IDes_tbUsers bigint not null,
+	SENT_UTC datetime not null,
+	CONTENT nvarchar(4096) not null
+);
+ALTER TABLE [es_tbMessages] ADD CONSTRAINT PK_es_tbMessages_ID PRIMARY KEY (ID);
+ALTER TABLE [es_tbMessages] ADD CONSTRAINT DF_es_tbMessages_ID DEFAULT (NEWID()) FOR ID;
+ALTER TABLE [es_tbMessages] ADD CONSTRAINT CK_es_tbMessages_SENT_UTC CHECK (SENT_UTC <= GETUTCDATE());
+
 /* FOREIGN KEYS */
 ALTER TABLE [es_tbLogins] ADD CONSTRAINT FK_es_tbLogins_IDes_tbUsers FOREIGN KEY (IDes_tbUsers) REFERENCES es_tbUsers(ID);
+ALTER TABLE [es_tbRooms] ADD CONSTRAINT FK_es_tbRooms_IDes_tbUsers FOREIGN KEY (IDes_tbUsers) REFERENCES es_tbUsers(ID);
+ALTER TABLE [es_tbRoomParticipants] ADD CONSTRAINT FK_es_tbRoomParticipants_IDes_tbRooms FOREIGN KEY (IDes_tbRooms) REFERENCES es_tbRooms(ID);
+ALTER TABLE [es_tbRoomParticipants] ADD CONSTRAINT FK_es_tbRoomParticipants_IDes_tbUsers FOREIGN KEY (IDes_tbUsers) REFERENCES es_tbUsers(ID);

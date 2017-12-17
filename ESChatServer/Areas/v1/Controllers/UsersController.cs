@@ -1,5 +1,4 @@
-﻿using ESChatServer.Areas.v1.Models.Application.Entities;
-using ESChatServer.Areas.v1.Models.Database;
+﻿using ESChatServer.Areas.v1.Models.Database;
 using ESChatServer.Areas.v1.Models.Database.Interfaces;
 using ESChatServer.Areas.v1.Models.Database.Repositories;
 using Microsoft.AspNetCore.Http;
