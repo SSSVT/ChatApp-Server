@@ -13,7 +13,7 @@ namespace ESChatServer.Areas.v1.Controllers
 {
     [Produces("application/json")]
     [Area("v1")]
-    public class RegistrationController : Controller
+    public partial class RegistrationController : Controller
     {
         #region Fields
         protected readonly IUsersRepository _usersRepository;
@@ -27,11 +27,11 @@ namespace ESChatServer.Areas.v1.Controllers
         }
 
         [HttpPost]
-        public IActionResult Register([FromBody]Registration registration)
+        public IActionResult Register([FromBody]Registration id)
         {
             try
             {
-                if (!ModelState.IsValid)
+                if (!ModelState.IsValid || !this._IsUsernameAvailable(id.Username))
                 {
                     return BadRequest(ModelState);
                 }
@@ -39,13 +39,13 @@ namespace ESChatServer.Areas.v1.Controllers
                 string salt = PasswordFactory.GenerateSalt(128);
                 Entities.User user = new Entities.User()
                 {
-                    FirstName = registration.FirstName,
-                    MiddleName = registration.MiddleName,
-                    LastName = registration.LastName,
-                    Birthday = registration.Birthday,
-                    Gender = registration.Gender,
-                    Username = registration.Username,
-                    PasswordHash = PasswordFactory.Hash(registration.Password, salt),
+                    FirstName = id.FirstName,
+                    MiddleName = id.MiddleName,
+                    LastName = id.LastName,
+                    Birthday = id.Birthday,
+                    Gender = id.Gender,
+                    Username = id.Username,
+                    PasswordHash = PasswordFactory.Hash(id.Password, salt),
                     PasswordSalt = salt,
                     UTCRegistrationDate = DateTime.UtcNow
                 };
@@ -60,11 +60,11 @@ namespace ESChatServer.Areas.v1.Controllers
             }
         }
         [HttpPost]
-        public async Task<IActionResult> RegisterAsync([FromBody]Registration registration)
+        public async Task<IActionResult> RegisterAsync([FromBody]Registration id)
         {
             try
             {
-                if (!ModelState.IsValid)
+                if (!ModelState.IsValid || !await this._IsUsernameAvailableAsync(id.Username))
                 {
                     return BadRequest(ModelState);
                 }
@@ -72,13 +72,13 @@ namespace ESChatServer.Areas.v1.Controllers
                 string salt = PasswordFactory.GenerateSalt(128);
                 Entities.User user = new Entities.User()
                 {
-                    FirstName = registration.FirstName,
-                    MiddleName = registration.MiddleName,
-                    LastName = registration.LastName,
-                    Birthday = registration.Birthday,
-                    Gender = registration.Gender,
-                    Username = registration.Username,
-                    PasswordHash = PasswordFactory.Hash(registration.Password, salt),
+                    FirstName = id.FirstName,
+                    MiddleName = id.MiddleName,
+                    LastName = id.LastName,
+                    Birthday = id.Birthday,
+                    Gender = id.Gender,
+                    Username = id.Username,
+                    PasswordHash = PasswordFactory.Hash(id.Password, salt),
                     PasswordSalt = salt,
                     UTCRegistrationDate = DateTime.UtcNow
                 };
@@ -103,7 +103,7 @@ namespace ESChatServer.Areas.v1.Controllers
                     return BadRequest(ModelState);
                 }
 
-                return Ok(this._usersRepository.FindByUsername(id) == null);
+                return Ok(this.IsUsernameAvailable(id));
             }
             catch (Exception ex)
             {
@@ -121,13 +121,25 @@ namespace ESChatServer.Areas.v1.Controllers
                     return BadRequest(ModelState);
                 }
 
-                return Ok(await this._usersRepository.FindByUsernameAsync(id) == null);
+                return Ok(await this._IsUsernameAvailableAsync(id));
             }
             catch (Exception ex)
             {
                 //TODO: SaveException
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
+        }
+    }
+
+    public partial class RegistrationController
+    {
+        protected bool _IsUsernameAvailable(string username)
+        {
+            return this._usersRepository.FindByUsername(username) == null;
+        }
+        protected async Task<bool> _IsUsernameAvailableAsync(string username)
+        {
+            return await this._usersRepository.FindByUsernameAsync(username) == null;
         }
     }
 }
