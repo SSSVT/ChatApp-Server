@@ -5,20 +5,20 @@ namespace ESChatServer.Areas.v1.Models.Application.Entities
 {
     public class Registration
     {
-        [MaxLength(64), Required]
+        [Required, MaxLength(64)]
         public string FirstName { get; set; }
         [MaxLength(64)]
         public string MiddleName { get; set; }
-        [MaxLength(64), Required]
+        [Required, MaxLength(64)]
         public string LastName { get; set; }
         [Required]
         public DateTime Birthday { get; set; }
-        [MaxLength(1), Required]
+        [Required, MaxLength(1)]
         public string Gender { get; set; }
 
-        [MaxLength(64), Required]
+        [Required, MaxLength(64)]
         public string Username { get; set; }
-        [MaxLength(128), Required]
+        [Required, MaxLength(128)]
         public string Password { get; set; }
     }
 }

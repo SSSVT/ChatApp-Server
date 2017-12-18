@@ -19,12 +19,39 @@ namespace ESChatServer.Areas.v1.Models.Database
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Friendship>().ToTable("es_tbFriendships");
             modelBuilder.Entity<Login>().ToTable("es_tbLogins");
             modelBuilder.Entity<Message>().ToTable("es_tbMessages");
             modelBuilder.Entity<Participant>().ToTable("es_tbRoomParticipants");
             modelBuilder.Entity<Room>().ToTable("es_tbRooms");
-            modelBuilder.Entity<User>().ToTable("es_tbUsers");            
+            modelBuilder.Entity<User>().ToTable("es_tbUsers");
 
+            #region Friendship
+            modelBuilder.Entity<Friendship>()
+                .Property(x => x.ID)
+                .HasColumnName("ID");
+            modelBuilder.Entity<Friendship>()
+                .HasKey(x => x.ID);
+            modelBuilder.Entity<Friendship>()
+                .Property(x => x.ID)
+                .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<Friendship>()
+                .Property(x => x.IDSender)
+                .HasColumnName("IDes_tbUsers_SENDER");
+
+            modelBuilder.Entity<Friendship>()
+                .Property(x => x.IDRecipient)
+                .HasColumnName("IDes_tbUsers_RECIPIENT");
+
+            modelBuilder.Entity<Friendship>()
+                .Property(x => x.UTCSend)
+                .HasColumnName("REQUEST_SEND_UTC");
+
+            modelBuilder.Entity<Friendship>()
+                .Property(x => x.UTCAccepted)
+                .HasColumnName("REQUEST_ACCEPTED_UTC");
+            #endregion
             #region Login
             modelBuilder.Entity<Login>()
                 .Property(x => x.ID)
@@ -65,7 +92,42 @@ namespace ESChatServer.Areas.v1.Models.Database
                 .HasConstraintName("FK_es_tbLogins_IDes_tbUsers");
             #endregion
             #region Message
+            modelBuilder.Entity<Message>()
+                .Property(x => x.ID)
+                .HasColumnName("ID");
+            modelBuilder.Entity<Message>()
+                .HasKey(x => x.ID);
+            modelBuilder.Entity<Message>()
+                .Property(x => x.ID)
+                .ValueGeneratedOnAdd();
 
+            modelBuilder.Entity<Message>()
+                .Property(x => x.IDRoom)
+                .HasColumnName("IDes_tbRooms");
+
+            modelBuilder.Entity<Message>()
+                .Property(x => x.IDUser)
+                .HasColumnName("IDes_tbUsers");
+
+            modelBuilder.Entity<Message>()
+                .Property(x => x.UTCSend)
+                .HasColumnName("SENT_UTC");
+
+            modelBuilder.Entity<Message>()
+                .Property(x => x.Content)
+                .HasColumnName("CONTENT");
+
+            modelBuilder.Entity<Message>()
+                .HasOne(m => m.User)
+                .WithMany(u => u.Messages)
+                .HasForeignKey(m => m.IDUser)
+                .HasConstraintName("FK_es_tbMessages_IDes_tbUsers");
+
+            modelBuilder.Entity<Message>()
+                .HasOne(m => m.Room)
+                .WithMany(u => u.Messages)
+                .HasForeignKey(m => m.IDRoom)
+                .HasConstraintName("FK_es_tbMessages_IDes_tbRooms");
             #endregion
             #region Participant
             modelBuilder.Entity<Participant>()
@@ -191,6 +253,10 @@ namespace ESChatServer.Areas.v1.Models.Database
             modelBuilder.Entity<User>()
                 .Property(x => x.UTCRegistrationDate)
                 .HasDefaultValue(DateTime.UtcNow);
+            
+            modelBuilder.Entity<User>()
+                .Property(x => x.Status)
+                .HasColumnName("USER_STATUS");
             #endregion
         }
     }

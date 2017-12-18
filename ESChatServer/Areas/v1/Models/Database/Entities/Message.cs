@@ -19,7 +19,7 @@ namespace ESChatServer.Areas.v1.Models.Database.Entities
         [Required]
         public DateTime UTCSend { get; set; }
 
-        [Required, MaxLength(4096)]
+        [Required]
         public string Content { get; set; }
 
         public virtual Room Room { get; set; }

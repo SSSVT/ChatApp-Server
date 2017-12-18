@@ -4,9 +4,9 @@ namespace ESChatServer.Areas.v1.Models.Application.Entities
 {
     public class Login
     {
-        [MaxLength(64), Required]
+        [Required, MaxLength(64)]
         public string Username { get; set; }
-        [MaxLength(128), Required]
+        [Required, MaxLength(128)]
         public string Password { get; set; }
     }
 }

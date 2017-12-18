@@ -45,6 +45,9 @@ namespace ESChatServer.Areas.v1.Models.Database.Entities
         [Required]
         public DateTime UTCRegistrationDate { get; set; }
 
+        [Required, MaxLength(1)]
+        public string Status { get; set; }
+
         public ICollection<Login> Logins { get; set; }
         public ICollection<Room> OwnedRooms { get; set; }
         public ICollection<Participant> Participants { get; set; }

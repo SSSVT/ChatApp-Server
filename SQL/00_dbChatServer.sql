@@ -24,7 +24,9 @@ CREATE TABLE [es_tbUsers](
 	PSWD_HASH nvarchar(2048) not null,
 	PSWD_SALT nvarchar(2048) not null,
 
-	REGISTERED_ON_UTC datetime not null
+	REGISTERED_ON_UTC datetime not null,
+
+	USER_STATUS char(1) not null
 );
 ALTER TABLE [es_tbUsers] ADD CONSTRAINT PK_es_tbUsers_ID PRIMARY KEY (ID);
 ALTER TABLE [es_tbUsers] ADD CONSTRAINT CK_es_tbUsers_BIRTHDAY CHECK (BIRTHDAY < DATEADD(yyyy, -13, GETDATE()));
@@ -77,14 +79,29 @@ CREATE TABLE [es_tbMessages](
 	IDes_tbRooms bigint not null,
 	IDes_tbUsers bigint not null,
 	SENT_UTC datetime not null,
-	CONTENT nvarchar(4096) not null
+	CONTENT nvarchar(max) not null
 );
 ALTER TABLE [es_tbMessages] ADD CONSTRAINT PK_es_tbMessages_ID PRIMARY KEY (ID);
 ALTER TABLE [es_tbMessages] ADD CONSTRAINT DF_es_tbMessages_ID DEFAULT (NEWID()) FOR ID;
 ALTER TABLE [es_tbMessages] ADD CONSTRAINT CK_es_tbMessages_SENT_UTC CHECK (SENT_UTC <= GETUTCDATE());
+
+CREATE TABLE [es_tbFriendships](
+	ID uniqueidentifier not null,
+	IDes_tbUsers_SENDER bigint not null,
+	IDes_tbUsers_RECIPIENT bigint not null,
+
+	REQUEST_SEND_UTC datetime not null,
+	REQUEST_ACCEPTED_UTC datetime not null,
+);
+ALTER TABLE [es_tbFriendships] ADD CONSTRAINT PK_es_tbFriendships_ID PRIMARY KEY NONCLUSTERED (ID);
+ALTER TABLE [es_tbFriendships] ADD CONSTRAINT DF_es_tbFriendships_ID DEFAULT (NEWID()) FOR ID;
+ALTER TABLE [es_tbFriendships] ADD CONSTRAINT Ck_es_tbFriendships_REQUEST_SEND_UTC CHECK (REQUEST_SEND_UTC <= GETUTCDATE());
+ALTER TABLE [es_tbFriendships] ADD CONSTRAINT Ck_es_tbFriendships_REQUEST_ACCEPTED_UTC CHECK (REQUEST_SEND_UTC < REQUEST_ACCEPTED_UTC AND REQUEST_ACCEPTED_UTC <= GETUTCDATE());
 
 /* FOREIGN KEYS */
 ALTER TABLE [es_tbLogins] ADD CONSTRAINT FK_es_tbLogins_IDes_tbUsers FOREIGN KEY (IDes_tbUsers) REFERENCES es_tbUsers(ID);
 ALTER TABLE [es_tbRooms] ADD CONSTRAINT FK_es_tbRooms_IDes_tbUsers FOREIGN KEY (IDes_tbUsers) REFERENCES es_tbUsers(ID);
 ALTER TABLE [es_tbRoomParticipants] ADD CONSTRAINT FK_es_tbRoomParticipants_IDes_tbRooms FOREIGN KEY (IDes_tbRooms) REFERENCES es_tbRooms(ID);
 ALTER TABLE [es_tbRoomParticipants] ADD CONSTRAINT FK_es_tbRoomParticipants_IDes_tbUsers FOREIGN KEY (IDes_tbUsers) REFERENCES es_tbUsers(ID);
+ALTER TABLE [es_tbMessages] ADD CONSTRAINT FK_es_tbMessages_IDes_tbRooms FOREIGN KEY (IDes_tbRooms) REFERENCES es_tbRooms(ID);
+ALTER TABLE [es_tbMessages] ADD CONSTRAINT FK_es_tbMessages_IDes_tbUsers FOREIGN KEY (IDes_tbUsers) REFERENCES es_tbUsers(ID);
