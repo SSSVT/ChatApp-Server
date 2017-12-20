@@ -1,38 +1,31 @@
-﻿using Newtonsoft.Json;
+﻿using ESChatServer.Areas.v1.Models.Application.Entities;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ESChatServer.Areas.v1.Models.Database.Entities
 {
-    public class User
+    public class User : Registration
     {
+        public User()
+        {
+
+        }
+        public User(Registration registration)
+        {
+            this.FirstName = registration.FirstName;
+            this.MiddleName = registration.MiddleName;
+            this.LastName = registration.LastName;
+            this.Birthday = registration.Birthday;
+            this.Gender = registration.Gender;
+            this.Email = registration.Email;
+            this.Username = registration.Username;
+        }
+
         [JsonIgnore]
         [Required]
         public long ID { get; set; }
-
-        [Required, MaxLength(64)]
-        [RegularExpression(".")]
-        public string FirstName { get; set; }
-
-        [MaxLength(64)]
-        [RegularExpression(".")]
-        public string MiddleName { get; set; }
-
-        [Required, MaxLength(64)]
-        [RegularExpression(".")]
-        public string LastName { get; set; }
-
-        [Required]
-        public DateTime Birthday { get; set; }
-
-        [Required, MaxLength(1)]
-        [RegularExpression("[MF]")]
-        public string Gender { get; set; }
-
-        [Required, MaxLength(64)]
-        public string Username { get; set; }
 
         [JsonIgnore]
         [Required, MaxLength(2048)]
@@ -46,10 +39,12 @@ namespace ESChatServer.Areas.v1.Models.Database.Entities
         public DateTime UTCRegistrationDate { get; set; }
 
         [Required, MaxLength(1)]
+        [RegularExpression("[ADIO]")] //Active, Do not disturn, Invisible, Offline
         public string Status { get; set; }
 
         public ICollection<Login> Logins { get; set; }
         public ICollection<Room> OwnedRooms { get; set; }
         public ICollection<Participant> Participants { get; set; }
+        public ICollection<Message> Messages { get; set; }
     }
 }

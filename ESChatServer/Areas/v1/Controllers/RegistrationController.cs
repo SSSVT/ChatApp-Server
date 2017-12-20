@@ -37,21 +37,16 @@ namespace ESChatServer.Areas.v1.Controllers
                 }
 
                 string salt = PasswordFactory.GenerateSalt(128);
-                Entities.User user = new Entities.User()
+                Entities.User user = new Entities.User(id)
                 {
-                    FirstName = id.FirstName,
-                    MiddleName = id.MiddleName,
-                    LastName = id.LastName,
-                    Birthday = id.Birthday,
-                    Gender = id.Gender,
-                    Username = id.Username,
                     PasswordHash = PasswordFactory.Hash(id.Password, salt),
                     PasswordSalt = salt,
-                    UTCRegistrationDate = DateTime.UtcNow
+                    UTCRegistrationDate = DateTime.UtcNow,
+                    Status = "A"
                 };
                 this._usersRepository.Add(user, true);
 
-                return NoContent();
+                return Ok(); //TODO: Return token
             }
             catch (Exception ex)
             {
@@ -70,21 +65,16 @@ namespace ESChatServer.Areas.v1.Controllers
                 }
 
                 string salt = PasswordFactory.GenerateSalt(128);
-                Entities.User user = new Entities.User()
+                Entities.User user = new Entities.User(id)
                 {
-                    FirstName = id.FirstName,
-                    MiddleName = id.MiddleName,
-                    LastName = id.LastName,
-                    Birthday = id.Birthday,
-                    Gender = id.Gender,
-                    Username = id.Username,
                     PasswordHash = PasswordFactory.Hash(id.Password, salt),
                     PasswordSalt = salt,
-                    UTCRegistrationDate = DateTime.UtcNow
+                    UTCRegistrationDate = DateTime.UtcNow,
+                    Status = "A"
                 };
                 await this._usersRepository.AddAsync(user, true);
 
-                return NoContent();
+                return Ok(); //TODO: Return token
             }
             catch (Exception ex)
             {

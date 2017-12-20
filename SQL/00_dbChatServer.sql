@@ -19,6 +19,7 @@ CREATE TABLE [es_tbUsers](
 	LAST_NAME nvarchar(64) not null,
 	BIRTHDAY date not null,
 	GENDER char(1) not null,
+	EMAIL nvarchar(512) not null,
 
 	USERNAME nvarchar(64) not null,
 	PSWD_HASH nvarchar(2048) not null,
@@ -34,6 +35,7 @@ ALTER TABLE [es_tbUsers] ADD CONSTRAINT CK_es_tbUsers_GENDER CHECK (GENDER IN ('
 CREATE INDEX IX_es_tbUsers_USERNAME ON [es_tbUsers](USERNAME);
 ALTER TABLE [es_tbUsers] ADD CONSTRAINT DF_es_tbUsers_REGISTERED_ON_UTC DEFAULT (GETUTCDATE()) FOR REGISTERED_ON_UTC;
 ALTER TABLE [es_tbUsers] ADD CONSTRAINT CK_es_tbUsers_REGISTERED_ON_UTC CHECK (REGISTERED_ON_UTC <= GETUTCDATE());
+ALTER TABLE [es_tbUsers] ADD CONSTRAINT CK_es_tbUsers_USER_STATUS CHECK (USER_STATUS IN ('A', 'D', 'I', 'O'))
 
 CREATE TABLE [es_tbLogins](
 	ID uniqueidentifier not null,

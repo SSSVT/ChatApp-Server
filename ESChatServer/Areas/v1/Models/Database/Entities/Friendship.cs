@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace ESChatServer.Areas.v1.Models.Database.Entities
 {
     public class Friendship
     {
-        [Requider]
+        [Required]
         public Guid ID { get; set; }
         public long IDSender { get; set; }
         public long IDRecipient { get; set; }

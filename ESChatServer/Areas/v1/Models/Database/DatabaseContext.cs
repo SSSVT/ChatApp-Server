@@ -238,6 +238,8 @@ namespace ESChatServer.Areas.v1.Models.Database
             modelBuilder.Entity<User>()
                 .Property(x => x.Username)
                 .HasColumnName("USERNAME");
+            modelBuilder.Entity<User>()
+                .Ignore(x => x.Password);
 
             modelBuilder.Entity<User>()
                 .Property(x => x.PasswordHash)
