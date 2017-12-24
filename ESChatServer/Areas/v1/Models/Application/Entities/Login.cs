@@ -6,7 +6,7 @@ namespace ESChatServer.Areas.v1.Models.Application.Entities
     {
         [Required, MaxLength(64)]
         public string Username { get; set; }
-        [Required, MaxLength(128)]
+        [Required, MinLength(8), MaxLength(128)]
         public string Password { get; set; }
     }
 }
