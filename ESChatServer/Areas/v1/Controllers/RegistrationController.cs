@@ -17,12 +17,10 @@ namespace ESChatServer.Areas.v1.Controllers
     {
         #region Fields
         protected readonly IUsersRepository _usersRepository;
-        protected readonly DatabaseContext _databaseContext;
         #endregion
 
         public RegistrationController(DatabaseContext context)
         {
-            this._databaseContext = context;
             this._usersRepository = new UsersRepository(context);
         }
 
