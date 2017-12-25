@@ -18,7 +18,7 @@ namespace ESChatServer.Areas.v1.Models.Application.Entities
         public string LastName { get; set; }
 
         [Required]
-        public DateTime? Birthday { get; set; }
+        public DateTime? Birthdate { get; set; }
 
         [Required, MaxLength(1)]
         [RegularExpression("[MF]")]

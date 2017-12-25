@@ -225,10 +225,10 @@ namespace ESChatServer.Areas.v1.Models.Database
                 .HasColumnName("LAST_NAME");
 
             modelBuilder.Entity<User>()
-                .Property(x => x.Birthday)
+                .Property(x => x.Birthdate)
                 .HasColumnName("BIRTHDAY");
             modelBuilder.Entity<User>()
-                .Property(x => x.Birthday)
+                .Property(x => x.Birthdate)
                 .HasColumnType("date");
 
             modelBuilder.Entity<User>()

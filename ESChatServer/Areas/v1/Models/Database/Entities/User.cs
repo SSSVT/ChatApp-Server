@@ -17,7 +17,7 @@ namespace ESChatServer.Areas.v1.Models.Database.Entities
             this.FirstName = registration.FirstName;
             this.MiddleName = registration.MiddleName;
             this.LastName = registration.LastName;
-            this.Birthday = registration.Birthday;
+            this.Birthdate = registration.Birthdate;
             this.Gender = registration.Gender;
             this.Email = registration.Email;
             this.Username = registration.Username;

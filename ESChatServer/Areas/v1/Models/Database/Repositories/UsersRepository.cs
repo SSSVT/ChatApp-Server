@@ -76,7 +76,7 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
             user.FirstName = item.FirstName;
             user.MiddleName = item.MiddleName;
             user.LastName = item.LastName;
-            user.Birthday = item.Birthday;
+            user.Birthdate = item.Birthdate;
             user.Gender = item.Gender;
             user.Username = item.Username;
             user.PasswordHash = item.PasswordHash;
@@ -95,7 +95,7 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
             user.FirstName = item.FirstName;
             user.MiddleName = item.MiddleName;
             user.LastName = item.LastName;
-            user.Birthday = item.Birthday;
+            user.Birthdate = item.Birthdate;
             user.Gender = item.Gender;
             user.Username = item.Username;
             user.PasswordHash = item.PasswordHash;
