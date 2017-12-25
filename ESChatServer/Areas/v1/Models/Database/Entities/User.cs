@@ -6,13 +6,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ESChatServer.Areas.v1.Models.Database.Entities
 {
-    public class User : Registration
+    public class User : RegistrationModel
     {
         public User()
         {
 
         }
-        public User(Registration registration)
+        public User(RegistrationModel registration)
         {
             this.FirstName = registration.FirstName;
             this.MiddleName = registration.MiddleName;

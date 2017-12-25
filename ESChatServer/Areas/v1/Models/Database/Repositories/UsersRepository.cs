@@ -82,7 +82,9 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
             user.PasswordHash = item.PasswordHash;
             user.PasswordSalt = item.PasswordSalt;
             user.UTCRegistrationDate = item.UTCRegistrationDate;
-            user.Logins = item.Logins;
+
+            //TODO: Update virtual properties?
+            //user.Logins = item.Logins;
 
             if (saveChanges)
                 this.SaveChanges();
@@ -99,7 +101,9 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
             user.PasswordHash = item.PasswordHash;
             user.PasswordSalt = item.PasswordSalt;
             user.UTCRegistrationDate = item.UTCRegistrationDate;
-            user.Logins = item.Logins;
+
+            //TODO: Update virtual properties?
+            //user.Logins = item.Logins;
 
             if (saveChanges)
                 await this.SaveChangesAsync();

@@ -2,7 +2,7 @@
 
 namespace ESChatServer.Areas.v1.Models.Database.Interfaces
 {
-    public interface IRoomsRepository : IRepository<Room>
+    public interface ILoginsRepository : IRepository<Login>
     {
         
     }

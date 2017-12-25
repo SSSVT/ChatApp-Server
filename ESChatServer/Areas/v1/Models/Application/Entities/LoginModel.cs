@@ -2,7 +2,7 @@
 
 namespace ESChatServer.Areas.v1.Models.Application.Entities
 {
-    public class Login
+    public class LoginModel
     {
         [Required, MaxLength(64)]
         public string Username { get; set; }

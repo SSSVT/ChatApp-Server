@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ESChatServer.Areas.v1.Models.Application.Entities
 {
-    public class Registration
+    public class RegistrationModel
     {
         [Required, MaxLength(64)]
         [RegularExpression(".+")]

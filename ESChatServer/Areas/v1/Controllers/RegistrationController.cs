@@ -27,7 +27,7 @@ namespace ESChatServer.Areas.v1.Controllers
         }
 
         [HttpPost]
-        public IActionResult Register([FromBody]Registration id)
+        public IActionResult Register([FromBody]RegistrationModel id)
         {
             try
             {
@@ -55,7 +55,7 @@ namespace ESChatServer.Areas.v1.Controllers
             }
         }
         [HttpPost]
-        public async Task<IActionResult> RegisterAsync([FromBody]Registration id)
+        public async Task<IActionResult> RegisterAsync([FromBody]RegistrationModel id)
         {
             try
             {

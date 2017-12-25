@@ -12,7 +12,10 @@ namespace ESChatServer.Areas.v1.Models.Database
         }
 
         #region DbSets
+        public DbSet<Friendship> Friendships { get; set; }
         public DbSet<Login> Logins { get; set; }
+        public DbSet<Message> Messages { get; set; }
+        public DbSet<Participant> Participants { get; set; }
         public DbSet<Room> Rooms { get; set; }
         public DbSet<User> Users { get; set; }
         #endregion
@@ -118,7 +121,7 @@ namespace ESChatServer.Areas.v1.Models.Database
                 .HasColumnName("CONTENT");
 
             modelBuilder.Entity<Message>()
-                .HasOne(m => m.User)
+                .HasOne(m => m.Owner)
                 .WithMany(u => u.Messages)
                 .HasForeignKey(m => m.IDUser)
                 .HasConstraintName("FK_es_tbMessages_IDes_tbUsers");

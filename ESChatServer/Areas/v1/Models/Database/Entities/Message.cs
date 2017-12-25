@@ -23,6 +23,6 @@ namespace ESChatServer.Areas.v1.Models.Database.Entities
         public string Content { get; set; }
 
         public virtual Room Room { get; set; }
-        public virtual User User { get; set; }
+        public virtual User Owner { get; set; }
     }
 }
