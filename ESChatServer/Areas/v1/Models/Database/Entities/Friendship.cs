@@ -6,13 +6,14 @@ namespace ESChatServer.Areas.v1.Models.Database.Entities
 {
     public class Friendship
     {
-        [JsonIgnore]
         [Required]
         public Guid ID { get; set; }
 
+        [JsonIgnore]
         [Required]
         public long IDSender { get; set; }
 
+        [JsonIgnore]
         [Required]
         public long IDRecipient { get; set; }
 

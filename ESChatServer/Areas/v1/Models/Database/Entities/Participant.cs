@@ -10,9 +10,11 @@ namespace ESChatServer.Areas.v1.Models.Database.Entities
         [Required]
         public Guid ID { get; set; }
 
+        [JsonIgnore]
         [Required]
         public long IDRoom { get; set; }
 
+        [JsonIgnore]
         [Required]
         public long IDUser { get; set; }
 

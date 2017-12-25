@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -9,6 +10,7 @@ namespace ESChatServer.Areas.v1.Models.Database.Entities
         [Required]
         public long ID { get; set; }
 
+        [JsonIgnore]
         [Required]
         public long IDOwner { get; set; }
 

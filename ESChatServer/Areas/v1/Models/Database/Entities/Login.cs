@@ -6,7 +6,6 @@ namespace ESChatServer.Areas.v1.Models.Database.Entities
 {
     public class Login
     {
-        [JsonIgnore]
         [Required]
         public Guid ID { get; set; }
 
