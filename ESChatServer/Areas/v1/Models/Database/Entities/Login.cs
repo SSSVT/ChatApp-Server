@@ -15,9 +15,9 @@ namespace ESChatServer.Areas.v1.Models.Database.Entities
         public long IDUser { get; set; }
 
         [Required]
-        public DateTime UTCLoginTime { get; set; }
+        public DateTime? UTCLoginTime { get; set; }
 
-        public DateTime UTCLogoutTime { get; set; }
+        public DateTime? UTCLogoutTime { get; set; }
 
         [Required, MaxLength(256)]
         public string UserAgent { get; set; }

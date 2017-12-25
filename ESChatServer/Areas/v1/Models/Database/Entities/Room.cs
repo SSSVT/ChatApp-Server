@@ -19,7 +19,7 @@ namespace ESChatServer.Areas.v1.Models.Database.Entities
         public string Description { get; set; }
 
         [Required]
-        public DateTime UTCCreationDate { get; set; }
+        public DateTime? UTCCreationDate { get; set; }
 
         public virtual User Owner { get; set; }
         public virtual ICollection<Participant> Participants { get; set; }

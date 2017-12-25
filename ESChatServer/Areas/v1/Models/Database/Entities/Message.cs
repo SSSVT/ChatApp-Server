@@ -17,7 +17,7 @@ namespace ESChatServer.Areas.v1.Models.Database.Entities
         public long IDUser { get; set; }
 
         [Required]
-        public DateTime UTCSend { get; set; }
+        public DateTime? UTCSend { get; set; }
 
         [Required]
         public string Content { get; set; }

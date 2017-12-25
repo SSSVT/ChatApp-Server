@@ -36,10 +36,10 @@ namespace ESChatServer.Areas.v1.Models.Database.Entities
         public string PasswordSalt { get; set; }
 
         [Required]
-        public DateTime UTCRegistrationDate { get; set; }
+        public DateTime? UTCRegistrationDate { get; set; }
 
         [Required, MaxLength(1)]
-        [RegularExpression("[ADIO]")] //Active, Do not disturn, Invisible, Offline
+        [RegularExpression("[ADIO]")] //Active, Do not disturb, Invisible, Offline
         public string Status { get; set; }
 
         public ICollection<Login> Logins { get; set; }
