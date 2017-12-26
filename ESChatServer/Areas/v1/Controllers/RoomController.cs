@@ -17,11 +17,13 @@ namespace ESChatServer.Areas.v1.Controllers
     {
         #region Fields
         protected readonly IRoomsRepository _roomsRepository;
+        protected readonly IUsersRepository _usersRepository;
         #endregion
 
         public RoomController(DatabaseContext context)
         {
             this._roomsRepository = new RoomsRepository(context);
+            this._usersRepository = new UsersRepository(context);
         }
 
         #region HttpGet (Select)
@@ -83,12 +85,65 @@ namespace ESChatServer.Areas.v1.Controllers
         [HttpPost]
         public IActionResult Create([FromBody]Room item)
         {
-            return StatusCode(StatusCodes.Status501NotImplemented);
+            try
+            {
+                ModelState.Remove("ID"); //Remove property from model validation
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                //Check authenticated user ID
+                string username = User.Claims.Where(c => c.Type == "sub").Single().Value;
+                User user = this._usersRepository.FindByUsername(username);
+
+                if (item.IDOwner == user.ID)
+                {
+                    this._roomsRepository.Add(item, true);
+                    return Ok();
+                }
+                else
+                {
+                    return Unauthorized();
+                }                
+            }
+            catch (Exception ex)
+            {
+                //TODO: SaveException
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+            
         }
         [HttpPost]
         public async Task<IActionResult> CreateAsync([FromBody]Room item)
         {
-            return StatusCode(StatusCodes.Status501NotImplemented);
+            try
+            {
+                ModelState.Remove("ID"); //Remove property from model validation
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                //Check authenticated user ID
+                string username = User.Claims.Where(c => c.Type == "sub").Single().Value;
+                User user = await this._usersRepository.FindByUsernameAsync(username);
+
+                if (item.IDOwner == user.ID)
+                {
+                    await this._roomsRepository.AddAsync(item, true);
+                    return Ok();
+                }
+                else
+                {
+                    return Unauthorized();
+                }
+            }
+            catch (Exception ex)
+            {
+                //TODO: SaveException
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
         #endregion
 
