@@ -6,15 +6,15 @@ namespace ESChatServer.Areas.v1.Models.Database.Entities
 {
     public class Participant
     {
-        [JsonIgnore]
+        //[JsonIgnore]
         [Required]
         public Guid ID { get; set; }
 
-        [JsonIgnore]
+        //[JsonIgnore]
         [Required]
         public long IDRoom { get; set; }
 
-        [JsonIgnore]
+        //[JsonIgnore]
         [Required]
         public long IDUser { get; set; }
 

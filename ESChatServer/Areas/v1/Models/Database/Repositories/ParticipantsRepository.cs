@@ -66,8 +66,6 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
             Participant participant = this.Find(item.ID);
             participant.IDRoom = item.IDRoom;
             participant.IDUser = item.IDUser;
-            participant.UTCJoinDate = item.UTCJoinDate;
-            participant.UTCLeftDate = item.UTCLeftDate;
 
             //TODO: Update virtual properties?
             //participant.Room = item.Room;
@@ -81,8 +79,6 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
             Participant participant = await this.FindAsync(item.ID);
             participant.IDRoom = item.IDRoom;
             participant.IDUser = item.IDUser;
-            participant.UTCJoinDate = item.UTCJoinDate;
-            participant.UTCLeftDate = item.UTCLeftDate;
 
             //TODO: Update virtual properties?
             //participant.Room = item.Room;
@@ -90,6 +86,24 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
 
             if (saveChanges)
                 await this.SaveChangesAsync();
+        }
+
+        public ICollection<Participant> FindByUserID(long id)
+        {
+            return this._DatabaseContext.Participants.Where(x => x.IDUser == id).ToList();
+        }
+        public async Task<ICollection<Participant>> FindByUserIDAsync(long id)
+        {
+            return await this._DatabaseContext.Participants.Where(x => x.IDUser == id).ToListAsync();
+        }
+
+        public ICollection<Participant> FindByRoomID(long id)
+        {
+            return this._DatabaseContext.Participants.Where(x => x.IDRoom == id).ToList();
+        }
+        public async Task<ICollection<Participant>> FindByRoomIDAsync(long id)
+        {
+            return await this._DatabaseContext.Participants.Where(x => x.IDRoom == id).ToListAsync();
         }
     }
 }

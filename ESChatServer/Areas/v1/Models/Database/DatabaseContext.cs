@@ -151,14 +151,6 @@ namespace ESChatServer.Areas.v1.Models.Database
                 .HasColumnName("IDes_tbUsers");
 
             modelBuilder.Entity<Participant>()
-                .Property(x => x.UTCJoinDate)
-                .HasColumnName("JOIN_DATE_UTC");
-
-            modelBuilder.Entity<Participant>()
-                .Property(x => x.UTCLeftDate)
-                .HasColumnName("LEFT_DATE_UTC");
-
-            modelBuilder.Entity<Participant>()
                 .HasOne(p => p.Room)
                 .WithMany(r => r.Participants)
                 .HasForeignKey(p => p.IDRoom)

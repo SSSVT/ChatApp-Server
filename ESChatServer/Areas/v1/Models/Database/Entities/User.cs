@@ -23,7 +23,6 @@ namespace ESChatServer.Areas.v1.Models.Database.Entities
             this.Username = registration.Username;
         }
 
-        [JsonIgnore]
         [Required]
         public long ID { get; set; }
 
