@@ -68,13 +68,9 @@ CREATE TABLE [es_tbRoomParticipants](
 	ID uniqueidentifier not null,
 	IDes_tbRooms bigint not null,
 	IDes_tbUsers bigint not null,
-	JOIN_DATE_UTC datetime not null,
-	LEFT_DATE_UTC datetime
 );
 ALTER TABLE [es_tbRoomParticipants] ADD CONSTRAINT PK_es_tbRoomParticipants_ID PRIMARY KEY NONCLUSTERED (ID);
 ALTER TABLE [es_tbRoomParticipants] ADD CONSTRAINT DF_es_tbRoomParticipants_ID DEFAULT (NEWID()) FOR ID;
-ALTER TABLE [es_tbRoomParticipants] ADD CONSTRAINT CK_es_tbRoomParticipants_JOIN_DATE_UTC CHECK (JOIN_DATE_UTC <= GETUTCDATE());
-ALTER TABLE [es_tbRoomParticipants] ADD CONSTRAINT CK_es_tbRoomParticipants_LEFT_DATE_UTC CHECK (JOIN_DATE_UTC < LEFT_DATE_UTC AND LEFT_DATE_UTC <= GETUTCDATE());
 
 CREATE TABLE [es_tbMessages](
 	ID uniqueidentifier not null,
