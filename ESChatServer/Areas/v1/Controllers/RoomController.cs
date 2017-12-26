@@ -148,11 +148,29 @@ namespace ESChatServer.Areas.v1.Controllers
         #endregion
 
         #region HttpPut (Update)
-
+        [HttpPut]
+        public IActionResult Update([FromBody]Room item)
+        {
+            return StatusCode(StatusCodes.Status501NotImplemented);
+        }
+        [HttpPut]
+        public async Task<IActionResult> UpdateAsync([FromBody]Room item)
+        {
+            return StatusCode(StatusCodes.Status501NotImplemented);
+        }
         #endregion
 
         #region HttpDelete (Delete)
-
+        [HttpDelete]
+        public IActionResult Delete(int id)
+        {
+            return StatusCode(StatusCodes.Status501NotImplemented);
+        }
+        [HttpDelete]
+        public async Task<IActionResult> DeleteAsync(int id)
+        {
+            return StatusCode(StatusCodes.Status501NotImplemented);
+        }
         #endregion
     }
 }
