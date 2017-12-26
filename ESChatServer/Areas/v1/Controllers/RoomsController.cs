@@ -1,26 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using ESChatServer.Areas.v1.Models.Database;
+﻿using ESChatServer.Areas.v1.Models.Database;
 using ESChatServer.Areas.v1.Models.Database.Entities;
 using ESChatServer.Areas.v1.Models.Database.Interfaces;
 using ESChatServer.Areas.v1.Models.Database.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ESChatServer.Areas.v1.Controllers
 {
     [Produces("application/json")]
     [Area("v1")]
-    public class RoomController : Controller
+    public class RoomsController : Controller
     {
         #region Fields
         protected readonly IRoomsRepository _roomsRepository;
         protected readonly IUsersRepository _usersRepository;
         #endregion
 
-        public RoomController(DatabaseContext context)
+        public RoomsController(DatabaseContext context)
         {
             this._roomsRepository = new RoomsRepository(context);
             this._usersRepository = new UsersRepository(context);
@@ -72,6 +71,44 @@ namespace ESChatServer.Areas.v1.Controllers
                 {
                     return NotFound(ModelState);
                 }
+            }
+            catch (Exception ex)
+            {
+                //TODO: SaveException
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet]
+        public IActionResult FindAll()
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                return Ok(this._roomsRepository.FindAll());
+            }
+            catch (Exception ex)
+            {
+                //TODO: SaveException
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> FindAllAsync()
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                return Ok(await this._roomsRepository.FindAllAsync());
             }
             catch (Exception ex)
             {
