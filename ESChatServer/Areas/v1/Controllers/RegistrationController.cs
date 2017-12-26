@@ -3,6 +3,7 @@ using ESChatServer.Areas.v1.Models.Application.Objects;
 using ESChatServer.Areas.v1.Models.Database;
 using ESChatServer.Areas.v1.Models.Database.Interfaces;
 using ESChatServer.Areas.v1.Models.Database.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -13,6 +14,7 @@ namespace ESChatServer.Areas.v1.Controllers
 {
     [Produces("application/json")]
     [Area("v1")]
+    [AllowAnonymous]
     public partial class RegistrationController : Controller
     {
         #region Fields

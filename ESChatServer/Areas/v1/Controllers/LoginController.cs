@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -40,14 +41,21 @@ namespace ESChatServer.Areas.v1.Controllers
 
             if (user != null)
             {
-                string tokenString = BuildToken(user);
-                response = Ok(new { token = tokenString });
+                JwtSecurityToken jwtSecurityToken = this.BuildToken(user);
+                string tokenString = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+                string expiration = jwtSecurityToken.Claims.Where(c => c.Type == "exp").Single().Value;
+
+                response = Ok(new{
+                    token = tokenString,
+                    exp = expiration,
+                    type = "Bearer"
+                });
             }
 
             return response;
         }
 
-        private string BuildToken(User user)
+        private JwtSecurityToken BuildToken(User user)
         {
             Claim[] claims = new[]
             {
@@ -67,7 +75,7 @@ namespace ESChatServer.Areas.v1.Controllers
                 expires: DateTime.Now.AddMinutes(30),
                 signingCredentials: creds);
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            return token;
         }
 
         private async Task<User> AuthenticateAsync(LoginModel login)
