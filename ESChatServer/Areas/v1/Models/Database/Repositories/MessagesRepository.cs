@@ -91,5 +91,25 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
             if (saveChanges)
                 await this.SaveChangesAsync();
         }
+
+        public ICollection<Message> FindByUserID(long id)
+        {
+            return this._DatabaseContext.Messages.Where(x => x.IDUser == id).ToList();
+        }
+
+        public async Task<ICollection<Message>> FindByUserIDAsync(long id)
+        {
+            return await this._DatabaseContext.Messages.Where(x => x.IDUser == id).ToListAsync();
+        }
+
+        public ICollection<Message> FindByRoomID(long id)
+        {
+            return this._DatabaseContext.Messages.Where(x => x.IDRoom == id).ToList();
+        }
+
+        public async Task<ICollection<Message>> FindByRoomIDAsync(long id)
+        {
+            return await this._DatabaseContext.Messages.Where(x => x.IDRoom == id).ToListAsync();
+        }
     }
 }
