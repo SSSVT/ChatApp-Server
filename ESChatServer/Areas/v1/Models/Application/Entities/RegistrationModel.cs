@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ESChatServer.Areas.v1.Models.Application.Entities
 {
-    public class RegistrationModel
+    public class RegistrationModel : LoginModel
     {
         [Required, MaxLength(64)]
         [RegularExpression(".+")]
@@ -27,13 +27,5 @@ namespace ESChatServer.Areas.v1.Models.Application.Entities
         [Required, MaxLength(512)]
         [EmailAddress]
         public string Email { get; set; }
-
-        [Required, MinLength(8), MaxLength(64)]
-        [RegularExpression(".+")]
-        public string Username { get; set; }
-
-        [Required, MinLength(8), MaxLength(128)]
-        [RegularExpression(".+")]
-        public string Password { get; set; }
     }
 }
