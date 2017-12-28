@@ -11,47 +11,37 @@ namespace ESChatServer.Areas.v1.Controllers
 {
     [Produces("application/json")]
     [Area("v1")]
-    public class ParticipantsController : Controller
+    public partial class FriendshipsController : Controller
     {
         #region Fields
-        protected readonly IParticipantsRepository _participantsRepository;
+        private readonly IFriendshipsRepository _friendshipsRepository;
         #endregion
 
-        public ParticipantsController(DatabaseContext context)
+        public FriendshipsController(DatabaseContext context)
         {
-            this._participantsRepository = new ParticipantsRepository(context);
+            this._friendshipsRepository = new FriendshipsRepository(context);
         }
 
         #region HttpGet (Select)
-        [HttpGet]
-        public IActionResult GetByUserID(long id)
+        [HttpGet("{id}")]
+        public IActionResult GetFriendshipsByUserID([FromRoute] long id)
         {
             try
             {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-
-                return Ok(this._participantsRepository.FindByUserID(id));
+                return Ok(this._friendshipsRepository.FindByUserID(id));
             }
             catch (Exception ex)
             {
                 //TODO: SaveException
                 return StatusCode(StatusCodes.Status500InternalServerError);
-            }
+            }            
         }
-        [HttpGet]
-        public async Task<IActionResult> GetByUserIDAsync(long id)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetFriendshipsByUserIDAsync([FromRoute] long id)
         {
             try
             {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-
-                return Ok(await this._participantsRepository.FindByUserIDAsync(id));
+                return Ok(await this._friendshipsRepository.FindByUserIDAsync(id));
             }
             catch (Exception ex)
             {
@@ -60,8 +50,8 @@ namespace ESChatServer.Areas.v1.Controllers
             }
         }
 
-        [HttpGet]
-        public IActionResult GetByRoomID(long id)
+        [HttpGet("{id}")]
+        public IActionResult GetFriendship([FromRoute] Guid id)
         {
             try
             {
@@ -70,7 +60,14 @@ namespace ESChatServer.Areas.v1.Controllers
                     return BadRequest(ModelState);
                 }
 
-                return Ok(this._participantsRepository.FindByRoomID(id));
+                Friendship friendship = this._friendshipsRepository.Find(id);
+
+                if (friendship == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(friendship);
             }
             catch (Exception ex)
             {
@@ -78,8 +75,8 @@ namespace ESChatServer.Areas.v1.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
-        [HttpGet]
-        public async Task<IActionResult> GetByRoomIDAsync(long id)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetFriendshipAsync([FromRoute] Guid id)
         {
             try
             {
@@ -88,19 +85,26 @@ namespace ESChatServer.Areas.v1.Controllers
                     return BadRequest(ModelState);
                 }
 
-                return Ok(await this._participantsRepository.FindByRoomIDAsync(id));
+                Friendship friendship = await this._friendshipsRepository.FindAsync(id);
+
+                if (friendship == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(friendship);
             }
             catch (Exception ex)
             {
                 //TODO: SaveException
                 return StatusCode(StatusCodes.Status500InternalServerError);
-            }
+            }            
         }
         #endregion
 
         #region HttpPost (Create)
         [HttpPost]
-        public IActionResult Create([FromBody]Participant item)
+        public IActionResult PostFriendship([FromBody] Friendship friendship)
         {
             try
             {
@@ -110,9 +114,9 @@ namespace ESChatServer.Areas.v1.Controllers
                     return BadRequest(ModelState);
                 }
 
-                this._participantsRepository.Add(item, true);
+                this._friendshipsRepository.Add(friendship, true);
 
-                return Ok();
+                return CreatedAtAction("GetFriendship", new { id = friendship.ID }, friendship);
             }
             catch (Exception ex)
             {
@@ -121,7 +125,7 @@ namespace ESChatServer.Areas.v1.Controllers
             }
         }
         [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromBody]Participant item)
+        public async Task<IActionResult> PostFriendshipAsync([FromBody] Friendship friendship)
         {
             try
             {
@@ -131,9 +135,9 @@ namespace ESChatServer.Areas.v1.Controllers
                     return BadRequest(ModelState);
                 }
 
-                await this._participantsRepository.AddAsync(item, true);
+                await this._friendshipsRepository.AddAsync(friendship, true);
 
-                return Ok();
+                return CreatedAtAction("GetFriendshipAsync", new { id = friendship.ID }, friendship);
             }
             catch (Exception ex)
             {
@@ -144,8 +148,8 @@ namespace ESChatServer.Areas.v1.Controllers
         #endregion
 
         #region HttpPut (Update)
-        [HttpPut]
-        public IActionResult Update([FromRoute] Guid id, [FromBody] Participant item)
+        [HttpPut("{id}")]
+        public IActionResult PutFriendship([FromRoute] Guid id, [FromBody] Friendship item)
         {
             try
             {
@@ -159,13 +163,13 @@ namespace ESChatServer.Areas.v1.Controllers
                     return BadRequest();
                 }
 
-                if (this._participantsRepository.Find(item.ID) != null)
+                if (this.FriendshipExists(id))
                 {
-                    this._participantsRepository.Update(item, true);
+                    this._friendshipsRepository.Update(item, true);
                 }
                 else
                 {
-                    return BadRequest(ModelState);
+                    return NotFound();
                 }
 
                 return NoContent();
@@ -176,8 +180,8 @@ namespace ESChatServer.Areas.v1.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
-        [HttpPut]
-        public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] Participant item)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutFriendshipAsync([FromRoute] Guid id, [FromBody] Friendship friendship)
         {
             try
             {
@@ -186,18 +190,18 @@ namespace ESChatServer.Areas.v1.Controllers
                     return BadRequest(ModelState);
                 }
 
-                if (id != item.ID)
+                if (id != friendship.ID)
                 {
                     return BadRequest();
                 }
 
-                if (await this._participantsRepository.FindAsync(item.ID) != null)
+                if (await this.FriendshipExistsAsync(id))
                 {
-                    await this._participantsRepository.UpdateAsync(item, true);
+                    await this._friendshipsRepository.UpdateAsync(friendship, true);
                 }
                 else
                 {
-                    return BadRequest(ModelState);
+                    return NotFound();
                 }
 
                 return NoContent();
@@ -211,48 +215,54 @@ namespace ESChatServer.Areas.v1.Controllers
         #endregion
 
         #region HttpDelete (Delete)
-        [HttpDelete]
-        public IActionResult Delete(Guid id)
+        [HttpDelete("{id}")]
+        public IActionResult DeleteFriendship([FromRoute] Guid id)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-
-                Participant item = this._participantsRepository.Find(id);
-                this._participantsRepository.Remove(item, true);
-
-                return Ok();
+                return BadRequest(ModelState);
             }
-            catch (Exception ex)
+
+            Friendship friendship = this._friendshipsRepository.Find(id);
+            if (friendship == null)
             {
-                //TODO: SaveException
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return NotFound();
             }
+
+            this._friendshipsRepository.Remove(friendship, true);
+
+            return Ok(friendship);
         }
-        [HttpDelete]
-        public async Task<IActionResult> DeleteAsync(Guid id)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteFriendshipAsync([FromRoute] Guid id)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-
-                Participant item = await this._participantsRepository.FindAsync(id);
-                await this._participantsRepository.RemoveAsync(item, true);
-
-                return Ok();
+                return BadRequest(ModelState);
             }
-            catch (Exception ex)
+
+            Friendship friendship = await this._friendshipsRepository.FindAsync(id);
+            if (friendship == null)
             {
-                //TODO: SaveException
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return NotFound();
             }
+
+            await this._friendshipsRepository.RemoveAsync(friendship, true);
+
+            return Ok(friendship);
         }
         #endregion
+    }
+
+    public partial class FriendshipsController
+    {
+        protected bool FriendshipExists(Guid id)
+        {
+            return this._friendshipsRepository.Exists(id);
+        }
+        protected async Task<bool> FriendshipExistsAsync(Guid id)
+        {
+            return await this._friendshipsRepository.ExistsAsync(id);
+        }
     }
 }

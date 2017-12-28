@@ -6,13 +6,14 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ESChatServer.Areas.v1.Controllers
 {
     [Produces("application/json")]
     [Area("v1")]
-    public class UsersController : Controller
+    public partial class UsersController : Controller
     {
         #region Fields
         protected readonly IUsersRepository _usersRepository;
@@ -41,7 +42,7 @@ namespace ESChatServer.Areas.v1.Controllers
                 }
                 else
                 {
-                    return NotFound(ModelState);
+                    return NotFound();
                 }
             }
             catch (Exception ex)
@@ -67,7 +68,7 @@ namespace ESChatServer.Areas.v1.Controllers
                 }
                 else
                 {
-                    return NotFound(ModelState);
+                    return NotFound();
                 }
             }
             catch (Exception ex)
@@ -94,7 +95,7 @@ namespace ESChatServer.Areas.v1.Controllers
                 }
                 else
                 {
-                    return NotFound(ModelState);
+                    return NotFound();
                 }
             }
             catch (Exception ex)
@@ -120,7 +121,7 @@ namespace ESChatServer.Areas.v1.Controllers
                 }
                 else
                 {
-                    return NotFound(ModelState);
+                    return NotFound();
                 }
             }
             catch (Exception ex)
@@ -147,7 +148,7 @@ namespace ESChatServer.Areas.v1.Controllers
                 }
                 else
                 {
-                    return NotFound(ModelState);
+                    return NotFound();
                 }
             }
             catch (Exception ex)
@@ -173,7 +174,7 @@ namespace ESChatServer.Areas.v1.Controllers
                 }
                 else
                 {
-                    return NotFound(ModelState);
+                    return NotFound();
                 }
             }
             catch (Exception ex)
@@ -184,25 +185,42 @@ namespace ESChatServer.Areas.v1.Controllers
         }
         #endregion
 
+        #region HttpPost (Create)
+        //Not supported
+        #endregion
+
         #region HttpPut (Update)
-        [HttpPut]
-        public IActionResult Update(long id, [FromBody]User user)
+        [HttpPut("{id}")]
+        public IActionResult Update([FromRoute] long id, [FromBody] User item)
         {
             try
             {
-                //TODO: Add update check (is current user || admin)
-                if (!ModelState.IsValid || user.ID != id)
+                if (!ModelState.IsValid)
                 {
                     return BadRequest(ModelState);
                 }
-
-                if (this._usersRepository.Find(user.ID) == null)
+                if (id != item.ID)
                 {
-                    return NotFound(ModelState);
+                    return BadRequest();
                 }
 
-                this._usersRepository.Update(user, true);
-                return Ok();
+                string username = User.Claims.Where(c => c.Type == "sub").Single().Value;
+                User user = this._usersRepository.FindByUsername(username);
+                if (id != user.ID)
+                {
+                    return Unauthorized();
+                }
+
+                if (this.UserExists(id))
+                {
+                    this._usersRepository.Update(item, true);
+                }
+                else
+                {
+                    return NotFound();
+                }
+
+                return NoContent();
             }
             catch (Exception ex)
             {
@@ -211,23 +229,36 @@ namespace ESChatServer.Areas.v1.Controllers
             }
         }
         [HttpPut]
-        public async Task<IActionResult> UpdateAsync(long id, [FromBody]User user)
+        public async Task<IActionResult> UpdateAsync(long id, [FromBody]User item)
         {
             try
             {
-                //TODO: Add update check (is current user || admin)
-                if (!ModelState.IsValid || user.ID != id)
+                if (!ModelState.IsValid)
                 {
                     return BadRequest(ModelState);
                 }
-
-                if (await this._usersRepository.FindAsync(user.ID) == null)
+                if (id != item.ID)
                 {
-                    return NotFound(ModelState);
+                    return BadRequest();
                 }
 
-                await this._usersRepository.UpdateAsync(user, true);
-                return Ok();
+                string username = User.Claims.Where(c => c.Type == "sub").Single().Value;
+                User user = await this._usersRepository.FindByUsernameAsync(username);
+                if (id != user.ID)
+                {
+                    return Unauthorized();
+                }
+
+                if (this.UserExists(id))
+                {
+                    await this._usersRepository.UpdateAsync(item, true);
+                }
+                else
+                {
+                    return NotFound();
+                }
+
+                return NoContent();
             }
             catch (Exception ex)
             {
@@ -251,7 +282,7 @@ namespace ESChatServer.Areas.v1.Controllers
                 User user = this._usersRepository.Find(id);
                 if (user == null)
                 {
-                    return NotFound(ModelState);
+                    return NotFound();
                 }
                 else
                 {
@@ -278,7 +309,7 @@ namespace ESChatServer.Areas.v1.Controllers
                 User user = await this._usersRepository.FindAsync(id);
                 if (user == null)
                 {
-                    return NotFound(ModelState);
+                    return NotFound();
                 }
                 else
                 {
@@ -293,5 +324,17 @@ namespace ESChatServer.Areas.v1.Controllers
             }
         }
         #endregion
+    }
+
+    public partial class UsersController
+    {
+        protected bool UserExists(long id)
+        {
+            return this._usersRepository.Exists(id);
+        }
+        protected async Task<bool> UserExistsAsync(long id)
+        {
+            return await this._usersRepository.ExistsAsync(id);
+        }
     }
 }

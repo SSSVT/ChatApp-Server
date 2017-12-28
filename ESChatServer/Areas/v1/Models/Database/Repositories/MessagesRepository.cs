@@ -96,7 +96,6 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
         {
             return this._DatabaseContext.Messages.Where(x => x.IDUser == id).ToList();
         }
-
         public async Task<ICollection<Message>> FindByUserIDAsync(long id)
         {
             return await this._DatabaseContext.Messages.Where(x => x.IDUser == id).ToListAsync();
@@ -106,7 +105,6 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
         {
             return this._DatabaseContext.Messages.Where(x => x.IDRoom == id).ToList();
         }
-
         public async Task<ICollection<Message>> FindByRoomIDAsync(long id)
         {
             return await this._DatabaseContext.Messages.Where(x => x.IDRoom == id).ToListAsync();

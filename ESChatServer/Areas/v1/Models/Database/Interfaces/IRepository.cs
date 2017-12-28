@@ -19,5 +19,8 @@ namespace ESChatServer.Areas.v1.Models.Database.Interfaces
 
         void Update(T item, bool saveChanges);
         Task UpdateAsync(T item, bool saveChanges);
+
+        bool Exists(object id);
+        Task<bool> ExistsAsync(object id);
     }
 }

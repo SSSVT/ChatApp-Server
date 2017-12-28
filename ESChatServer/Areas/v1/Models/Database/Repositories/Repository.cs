@@ -23,6 +23,8 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
         public abstract Task RemoveAsync(T item, bool saveChanges);
         public abstract void Update(T item, bool saveChanges);
         public abstract Task UpdateAsync(T item, bool saveChanges);
+        public abstract bool Exists(object id);
+        public abstract Task<bool> ExistsAsync(object id);
 
         public virtual void SaveChanges()
         {

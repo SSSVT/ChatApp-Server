@@ -43,7 +43,7 @@ namespace ESChatServer.Areas.v1.Controllers
                 }
                 else
                 {
-                    return NotFound(ModelState);
+                    return NotFound();
                 }
             }
             catch (Exception ex)
@@ -69,7 +69,7 @@ namespace ESChatServer.Areas.v1.Controllers
                 }
                 else
                 {
-                    return NotFound(ModelState);
+                    return NotFound();
                 }
             }
             catch (Exception ex)

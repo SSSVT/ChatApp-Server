@@ -55,7 +55,7 @@ namespace ESChatServer.Areas.v1.Controllers
             return response;
         }
 
-        private JwtSecurityToken BuildToken(User user)
+        protected JwtSecurityToken BuildToken(User user)
         {
             Claim[] claims = new[]
             {
@@ -78,7 +78,7 @@ namespace ESChatServer.Areas.v1.Controllers
             return token;
         }
 
-        private async Task<User> AuthenticateAsync(LoginModel login)
+        protected async Task<User> AuthenticateAsync(LoginModel login)
         {
             User user = await this._usersRepository.FindByUsernameAsync(login.Username);
 

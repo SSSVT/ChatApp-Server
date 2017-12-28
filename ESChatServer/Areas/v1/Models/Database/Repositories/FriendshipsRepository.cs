@@ -91,5 +91,23 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
             if (saveChanges)
                 await this.SaveChangesAsync();
         }
+
+        public ICollection<Friendship> FindByUserID(long id)
+        {
+            return this._DatabaseContext.Friendships.Where(x => x.IDSender == id || x.IDRecipient == id).ToList();
+        }
+        public async Task<ICollection<Friendship>> FindByUserIDAsync(long id)
+        {
+            return await this._DatabaseContext.Friendships.Where(x => x.IDSender == id || x.IDRecipient == id).ToListAsync();
+        }
+
+        public override bool Exists(object id)
+        {
+            return this.Find(id) != null;
+        }
+        public override async Task<bool> ExistsAsync(object id)
+        {
+            return await this.FindAsync(id) != null;
+        }
     }
 }
