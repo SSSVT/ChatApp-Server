@@ -37,15 +37,6 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
             return await this._DatabaseContext.Rooms.FindAsync(id);
         }
 
-        public virtual ICollection<Room> FindByUserID(long id)
-        {
-            throw new System.NotImplementedException();
-        }
-        public virtual async Task<ICollection<Room>> FindByUserIDAsync(long id)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public override ICollection<Room> FindAll()
         {
             return this._DatabaseContext.Rooms.ToList();
@@ -99,6 +90,24 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
 
             if (saveChanges)
                 await this.SaveChangesAsync();
+        }
+
+        public virtual ICollection<Room> FindByUserID(long id)
+        {
+            throw new System.NotImplementedException();
+        }
+        public virtual async Task<ICollection<Room>> FindByUserIDAsync(long id)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override bool Exists(object id)
+        {
+            return this.Find(id) != null;
+        }
+        public override async Task<bool> ExistsAsync(object id)
+        {
+            return await this.FindAsync(id) != null;
         }
     }
 }

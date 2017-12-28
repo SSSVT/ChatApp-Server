@@ -46,15 +46,6 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
             return await this._DatabaseContext.Users.ToListAsync();
         }
 
-        public User FindByUsername(string username)
-        {
-            return this._DatabaseContext.Users.Where(x => x.Username == username).FirstOrDefault();
-        }
-        public async Task<User> FindByUsernameAsync(string username)
-        {
-            return await this._DatabaseContext.Users.Where(x => x.Username == username).FirstOrDefaultAsync();
-        }
-
         public override void Remove(User item, bool saveChanges)
         {
             this._DatabaseContext.Users.Remove(item);
@@ -107,6 +98,24 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
 
             if (saveChanges)
                 await this.SaveChangesAsync();
+        }
+
+        public User FindByUsername(string username)
+        {
+            return this._DatabaseContext.Users.Where(x => x.Username == username).FirstOrDefault();
+        }
+        public async Task<User> FindByUsernameAsync(string username)
+        {
+            return await this._DatabaseContext.Users.Where(x => x.Username == username).FirstOrDefaultAsync();
+        }
+
+        public override bool Exists(object id)
+        {
+            return this.Find(id) != null;
+        }
+        public override async Task<bool> ExistsAsync(object id)
+        {
+            return await this.FindAsync(id) != null;
         }
     }
 }

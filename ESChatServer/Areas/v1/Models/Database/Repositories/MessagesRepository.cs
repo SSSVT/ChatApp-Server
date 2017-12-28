@@ -109,5 +109,14 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
         {
             return await this._DatabaseContext.Messages.Where(x => x.IDRoom == id).ToListAsync();
         }
+
+        public override bool Exists(object id)
+        {
+            return this.Find(id) != null;
+        }
+        public override async Task<bool> ExistsAsync(object id)
+        {
+            return await this.FindAsync(id) != null;
+        }
     }
 }
