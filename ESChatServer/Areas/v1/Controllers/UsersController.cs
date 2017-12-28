@@ -1,4 +1,5 @@
-﻿using ESChatServer.Areas.v1.Models.Database;
+﻿using ESChatServer.Areas.v1.Models.Application.Objects;
+using ESChatServer.Areas.v1.Models.Database;
 using ESChatServer.Areas.v1.Models.Database.Entities;
 using ESChatServer.Areas.v1.Models.Database.Interfaces;
 using ESChatServer.Areas.v1.Models.Database.Repositories;
@@ -30,8 +31,7 @@ namespace ESChatServer.Areas.v1.Controllers
         {
             try
             {
-                string username = User.Claims.Where(c => c.Type == "sub").Single().Value;
-                User user = this._usersRepository.FindByUsername(username);
+                User user = this._usersRepository.FindByUsername(UserObtainer.GetCurrentUserUsername(User.Claims));
 
                 if (user != null)
                 {
@@ -228,8 +228,7 @@ namespace ESChatServer.Areas.v1.Controllers
                     return BadRequest();
                 }
 
-                string username = User.Claims.Where(c => c.Type == "sub").Single().Value;
-                User user = this._usersRepository.FindByUsername(username);
+                User user = this._usersRepository.FindByUsername(UserObtainer.GetCurrentUserUsername(User.Claims));
                 if (id != user.ID)
                 {
                     return Unauthorized();
@@ -266,8 +265,7 @@ namespace ESChatServer.Areas.v1.Controllers
                     return BadRequest();
                 }
 
-                string username = User.Claims.Where(c => c.Type == "sub").Single().Value;
-                User user = await this._usersRepository.FindByUsernameAsync(username);
+                User user = this._usersRepository.FindByUsername(UserObtainer.GetCurrentUserUsername(User.Claims));
                 if (id != user.ID)
                 {
                     return Unauthorized();
