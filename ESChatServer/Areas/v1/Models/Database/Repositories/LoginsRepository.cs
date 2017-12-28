@@ -100,5 +100,14 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
         {
             return await this.FindAsync(id) != null;
         }
+
+        public ICollection<Login> FindByUserID(long id)
+        {
+            return this._DatabaseContext.Logins.Where(x => x.IDUser == id).ToList();
+        }
+        public async Task<ICollection<Login>> FindByUserIDAsync(long id)
+        {
+            return await this._DatabaseContext.Logins.Where(x => x.IDUser == id).ToListAsync();
+        }
     }
 }
