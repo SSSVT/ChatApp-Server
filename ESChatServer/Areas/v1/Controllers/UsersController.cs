@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ESChatServer.Areas.v1.Controllers
@@ -214,11 +213,14 @@ namespace ESChatServer.Areas.v1.Controllers
         #endregion
 
         #region HttpPut (Update)
-        [HttpPut("{id}")]
-        public IActionResult Update([FromRoute] long id, [FromBody] User item)
+        [HttpPut]
+        public IActionResult UpdateUser([FromRoute] long id, [FromBody] User item)
         {
             try
             {
+                ModelState.Remove("Password");
+                ModelState.Remove("PasswordHash");
+                ModelState.Remove("PasswordSalt");
                 if (!ModelState.IsValid)
                 {
                     return BadRequest(ModelState);

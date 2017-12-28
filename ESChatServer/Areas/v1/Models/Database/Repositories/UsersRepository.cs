@@ -70,8 +70,14 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
             user.Birthdate = item.Birthdate;
             user.Gender = item.Gender;
             user.Username = item.Username;
-            user.PasswordHash = item.PasswordHash;
-            user.PasswordSalt = item.PasswordSalt;
+            if (item.PasswordHash != null)
+            {
+                user.PasswordHash = item.PasswordHash;
+            }
+            if (item.PasswordSalt != null)
+            {
+                user.PasswordSalt = item.PasswordSalt;
+            }            
             user.UTCRegistrationDate = item.UTCRegistrationDate;
 
             //TODO: Update virtual properties?
