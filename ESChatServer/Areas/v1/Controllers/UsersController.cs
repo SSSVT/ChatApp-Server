@@ -26,6 +26,30 @@ namespace ESChatServer.Areas.v1.Controllers
 
         #region HttpGet (Select)
         [HttpGet]
+        public IActionResult GetCurrentUser()
+        {
+            try
+            {
+                string username = User.Claims.Where(c => c.Type == "sub").Single().Value;
+                User user = this._usersRepository.FindByUsername(username);
+
+                if (user != null)
+                {
+                    return Ok(user);
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch (Exception ex)
+            {
+                //TODO: SaveException
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet]
         public IActionResult FindAll()
         {
             try
