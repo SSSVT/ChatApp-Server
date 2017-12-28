@@ -19,14 +19,14 @@ namespace ESChatServer.Areas.v1.Controllers
 {
     [Produces("application/json")]
     [Area("v1")]
-    public class LoginController : Controller
+    public class TokenController : Controller
     {
         #region Fields
         private IConfiguration _config;
         protected readonly IUsersRepository _usersRepository;
         #endregion
 
-        public LoginController(IConfiguration config, DatabaseContext context)
+        public TokenController(IConfiguration config, DatabaseContext context)
         {
             this._config = config;
             this._usersRepository = new UsersRepository(context);
