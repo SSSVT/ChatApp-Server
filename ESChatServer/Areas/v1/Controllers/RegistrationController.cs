@@ -36,7 +36,7 @@ namespace ESChatServer.Areas.v1.Controllers
                     return BadRequest(ModelState);
                 }
 
-                string salt = PasswordFactory.GenerateSalt(128);
+                string salt = PasswordFactory.GenerateSalt();
                 Entities.User user = new Entities.User(id)
                 {
                     PasswordHash = PasswordFactory.Hash(id.Password, salt),
@@ -64,7 +64,7 @@ namespace ESChatServer.Areas.v1.Controllers
                     return BadRequest(ModelState);
                 }
 
-                string salt = PasswordFactory.GenerateSalt(128);
+                string salt = PasswordFactory.GenerateSalt();
                 Entities.User user = new Entities.User(id)
                 {
                     PasswordHash = PasswordFactory.Hash(id.Password, salt),

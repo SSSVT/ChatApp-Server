@@ -16,7 +16,7 @@ namespace ESChatServer.Areas.v1.Models.Application.Objects
             return BitConverter.ToString(new SHA512CryptoServiceProvider().ComputeHash(Encoding.Default.GetBytes(builder.ToString()))).Replace("-", String.Empty).ToUpper();
         }
 
-        public static string GenerateSalt(int length)
+        public static string GenerateSalt(int length = 128)
         {
             string chars = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!#$%&'()*+,-./0123456789:;<=>?@[]^_{}|";
             StringBuilder sb = new StringBuilder(length);

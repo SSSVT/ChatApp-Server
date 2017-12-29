@@ -238,6 +238,12 @@ namespace ESChatServer.Areas.v1.Controllers
 
                 if (this.UserExists(id))
                 {
+                    if (item.Password != null)
+                    {
+                        item.PasswordSalt = PasswordFactory.GenerateSalt();
+                        item.PasswordHash = PasswordFactory.Hash(item.Password, item.PasswordSalt);
+                    }
+
                     this._usersRepository.Update(item, true);
                 }
                 else
@@ -258,6 +264,9 @@ namespace ESChatServer.Areas.v1.Controllers
         {
             try
             {
+                ModelState.Remove("Password");
+                ModelState.Remove("PasswordHash");
+                ModelState.Remove("PasswordSalt");
                 if (!ModelState.IsValid)
                 {
                     return BadRequest(ModelState);
@@ -267,7 +276,7 @@ namespace ESChatServer.Areas.v1.Controllers
                     return BadRequest();
                 }
 
-                User user = this._usersRepository.FindByUsername(UserObtainer.GetCurrentUserUsername(User.Claims));
+                User user = await this._usersRepository.FindByUsernameAsync(UserObtainer.GetCurrentUserUsername(User.Claims));
                 if (id != user.ID)
                 {
                     return Unauthorized();
@@ -275,6 +284,12 @@ namespace ESChatServer.Areas.v1.Controllers
 
                 if (this.UserExists(id))
                 {
+                    if (item.Password != null)
+                    {
+                        item.PasswordSalt = PasswordFactory.GenerateSalt();
+                        item.PasswordHash = PasswordFactory.Hash(item.Password, item.PasswordSalt);
+                    }
+
                     await this._usersRepository.UpdateAsync(item, true);
                 }
                 else

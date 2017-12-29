@@ -23,7 +23,7 @@ namespace ESChatServer.Areas.v1.Controllers
         }
 
         #region HttpGet (Select)
-        [HttpGet("{id}")]
+        [HttpGet]
         public IActionResult GetFriendshipsByUserID([FromRoute] long id)
         {
             try
@@ -36,7 +36,7 @@ namespace ESChatServer.Areas.v1.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }            
         }
-        [HttpGet("{id}")]
+        [HttpGet]
         public async Task<IActionResult> GetFriendshipsByUserIDAsync([FromRoute] long id)
         {
             try
@@ -50,7 +50,7 @@ namespace ESChatServer.Areas.v1.Controllers
             }
         }
 
-        [HttpGet("{id}")]
+        [HttpGet]
         public IActionResult GetFriendship([FromRoute] Guid id)
         {
             try
@@ -75,7 +75,7 @@ namespace ESChatServer.Areas.v1.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
-        [HttpGet("{id}")]
+        [HttpGet]
         public async Task<IActionResult> GetFriendshipAsync([FromRoute] Guid id)
         {
             try
@@ -148,7 +148,7 @@ namespace ESChatServer.Areas.v1.Controllers
         #endregion
 
         #region HttpPut (Update)
-        [HttpPut("{id}")]
+        [HttpPut]
         public IActionResult PutFriendship([FromRoute] Guid id, [FromBody] Friendship item)
         {
             try
@@ -180,7 +180,7 @@ namespace ESChatServer.Areas.v1.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
-        [HttpPut("{id}")]
+        [HttpPut]
         public async Task<IActionResult> PutFriendshipAsync([FromRoute] Guid id, [FromBody] Friendship friendship)
         {
             try
@@ -215,7 +215,7 @@ namespace ESChatServer.Areas.v1.Controllers
         #endregion
 
         #region HttpDelete (Delete)
-        [HttpDelete("{id}")]
+        [HttpDelete]
         public IActionResult DeleteFriendship([FromRoute] Guid id)
         {
             if (!ModelState.IsValid)
@@ -233,7 +233,7 @@ namespace ESChatServer.Areas.v1.Controllers
 
             return Ok(friendship);
         }
-        [HttpDelete("{id}")]
+        [HttpDelete]
         public async Task<IActionResult> DeleteFriendshipAsync([FromRoute] Guid id)
         {
             if (!ModelState.IsValid)

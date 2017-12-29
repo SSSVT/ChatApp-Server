@@ -60,7 +60,7 @@ namespace ESChatServer.Areas.v1.Controllers
             }
         }
 
-        [HttpGet("{id}")]
+        [HttpGet]
         public IActionResult GetLogin([FromRoute] Guid id)
         {
             try
@@ -85,7 +85,7 @@ namespace ESChatServer.Areas.v1.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
-        [HttpGet("{id}")]
+        [HttpGet]
         public async Task<IActionResult> GetLoginAsync([FromRoute] Guid id)
         {
             try
@@ -111,7 +111,7 @@ namespace ESChatServer.Areas.v1.Controllers
             }
         }
 
-        [HttpGet("{id}")]
+        [HttpGet]
         public IActionResult GetLoginsByUserID(long id)
         {
             try
@@ -129,7 +129,7 @@ namespace ESChatServer.Areas.v1.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
-        [HttpGet("{id}")]
+        [HttpGet]
         public async Task<IActionResult> GetLoginsByUserIDAsync(long id)
         {
             try
@@ -158,7 +158,7 @@ namespace ESChatServer.Areas.v1.Controllers
         #endregion
 
         #region HttpDelete (Delete)
-        [HttpDelete("{id}")]
+        [HttpDelete]
         public IActionResult DeleteLogin([FromRoute] Guid id)
         {
             try
@@ -184,7 +184,7 @@ namespace ESChatServer.Areas.v1.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
-        [HttpDelete("{id}")]
+        [HttpDelete]
         public async Task<IActionResult> DeleteLoginAsync([FromRoute] Guid id)
         {
             try
