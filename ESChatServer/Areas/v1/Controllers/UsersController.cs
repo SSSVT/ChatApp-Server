@@ -214,7 +214,7 @@ namespace ESChatServer.Areas.v1.Controllers
 
         #region HttpPut (Update)
         [HttpPut]
-        public IActionResult UpdateUser([FromRoute] long id, [FromBody] User item)
+        public IActionResult Update([FromRoute] long id, [FromBody] User item)
         {
             try
             {
