@@ -47,6 +47,28 @@ namespace ESChatServer.Areas.v1.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+        [HttpGet]
+        public async Task<IActionResult> GetCurrentUserAsync()
+        {
+            try
+            {
+                User user = await this._usersRepository.FindByUsernameAsync(UserObtainer.GetCurrentUserUsername(User.Claims));
+
+                if (user != null)
+                {
+                    return Ok(user);
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch (Exception ex)
+            {
+                //TODO: SaveException
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
 
         [HttpGet]
         public IActionResult FindAll()
