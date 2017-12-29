@@ -5,16 +5,18 @@ using ESChatServer.Areas.v1.Models.Database.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ESChatServer.Areas.v1.Controllers
 {
     [Produces("application/json")]
     [Area("v1")]
-    public class MessagesController : Controller
+    public sealed class MessagesController : Controller
     {
         #region Fields
-        protected readonly IMessagesRepository _messagesRepository;
+        private readonly IMessagesRepository _messagesRepository;
         #endregion
 
         public MessagesController(DatabaseContext context)
@@ -24,7 +26,7 @@ namespace ESChatServer.Areas.v1.Controllers
 
         #region HttpGet (Select)
         [HttpGet]
-        public IActionResult GetByUserID(long id)
+        public IActionResult GetByUserID([FromRoute] long id)
         {
             try
             {
@@ -33,7 +35,13 @@ namespace ESChatServer.Areas.v1.Controllers
                     return BadRequest(ModelState);
                 }
 
-                return Ok(this._messagesRepository.FindByUserID(id));
+                ICollection<Message> messages = this._messagesRepository.FindByUserID(id);
+                if (messages.Count == 0)
+                {
+                    return NotFound(id);
+                }
+
+                return Ok(messages);
             }
             catch (Exception ex)
             {
@@ -42,7 +50,7 @@ namespace ESChatServer.Areas.v1.Controllers
             }
         }
         [HttpGet]
-        public async Task<IActionResult> GetByUserIDAsync(long id)
+        public async Task<IActionResult> GetByUserIDAsync([FromRoute] long id)
         {
             try
             {
@@ -51,7 +59,13 @@ namespace ESChatServer.Areas.v1.Controllers
                     return BadRequest(ModelState);
                 }
 
-                return Ok(await this._messagesRepository.FindByUserIDAsync(id));
+                ICollection<Message> messages = await this._messagesRepository.FindByUserIDAsync(id);
+                if (messages.Count == 0)
+                {
+                    return NotFound();
+                }
+
+                return Ok(messages);
             }
             catch (Exception ex)
             {
@@ -61,7 +75,7 @@ namespace ESChatServer.Areas.v1.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetByRoomID(long id)
+        public IActionResult GetByRoomID([FromRoute] long id)
         {
             try
             {
@@ -70,7 +84,13 @@ namespace ESChatServer.Areas.v1.Controllers
                     return BadRequest(ModelState);
                 }
 
-                return Ok(this._messagesRepository.FindByRoomID(id));
+                ICollection<Message> messages = this._messagesRepository.FindByRoomID(id);
+                if (messages.Count == 0)
+                {
+                    return NotFound();
+                }
+
+                return Ok(messages);
             }
             catch (Exception ex)
             {
@@ -79,7 +99,7 @@ namespace ESChatServer.Areas.v1.Controllers
             }
         }
         [HttpGet]
-        public async Task<IActionResult> GetByRoomIDAsync(long id)
+        public async Task<IActionResult> GetByRoomIDAsync([FromRoute] long id)
         {
             try
             {
@@ -88,7 +108,13 @@ namespace ESChatServer.Areas.v1.Controllers
                     return BadRequest(ModelState);
                 }
 
-                return Ok(await this._messagesRepository.FindByRoomIDAsync(id));
+                ICollection<Message> messages = await this._messagesRepository.FindByRoomIDAsync(id);
+                if (messages.Count == 0)
+                {
+                    return NotFound();
+                }
+
+                return Ok(messages);
             }
             catch (Exception ex)
             {
@@ -100,7 +126,7 @@ namespace ESChatServer.Areas.v1.Controllers
 
         #region HttpPost (Create)
         [HttpPost]
-        public IActionResult Create([FromBody]Message item)
+        public IActionResult Create([FromBody] Message item)
         {
             try
             {
@@ -111,7 +137,7 @@ namespace ESChatServer.Areas.v1.Controllers
                 }
 
                 this._messagesRepository.Add(item, true);
-                return Ok();
+                return StatusCode(StatusCodes.Status201Created);
             }
             catch (Exception ex)
             {
@@ -120,7 +146,7 @@ namespace ESChatServer.Areas.v1.Controllers
             }
         }
         [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromBody]Message item)
+        public async Task<IActionResult> CreateAsync([FromBody] Message item)
         {
             try
             {
@@ -131,7 +157,7 @@ namespace ESChatServer.Areas.v1.Controllers
                 }
 
                 await this._messagesRepository.AddAsync(item, true);
-                return Ok();
+                return StatusCode(StatusCodes.Status201Created);
             }
             catch (Exception ex)
             {
@@ -139,14 +165,6 @@ namespace ESChatServer.Areas.v1.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
-        #endregion
-
-        #region HttpPut (Update)
-        //Not supported in this version
-        #endregion
-
-        #region HttpDelete (Delete)
-        //Not supported in this version
         #endregion
     }
 }

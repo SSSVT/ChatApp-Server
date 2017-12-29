@@ -13,10 +13,10 @@ namespace ESChatServer.Areas.v1.Controllers
 {
     [Produces("application/json")]
     [Area("v1")]
-    public partial class UsersController : Controller
+    public sealed partial class UsersController : Controller
     {
         #region Fields
-        protected readonly IUsersRepository _usersRepository;
+        private readonly IUsersRepository _usersRepository;
         #endregion
 
         public UsersController(DatabaseContext context)
@@ -140,7 +140,7 @@ namespace ESChatServer.Areas.v1.Controllers
                 }
                 else
                 {
-                    return NotFound();
+                    return BadRequest(id);
                 }
             }
             catch (Exception ex)
@@ -166,7 +166,7 @@ namespace ESChatServer.Areas.v1.Controllers
                 }
                 else
                 {
-                    return NotFound();
+                    return BadRequest(id);
                 }
             }
             catch (Exception ex)
@@ -230,10 +230,6 @@ namespace ESChatServer.Areas.v1.Controllers
         }
         #endregion
 
-        #region HttpPost (Create)
-        //Not supported
-        #endregion
-
         #region HttpPut (Update)
         [HttpPut]
         public IActionResult Update([FromRoute] long id, [FromBody] User item)
@@ -247,15 +243,10 @@ namespace ESChatServer.Areas.v1.Controllers
                 {
                     return BadRequest(ModelState);
                 }
+
                 if (id != item.ID)
                 {
                     return BadRequest();
-                }
-
-                User user = this._usersRepository.FindByUsername(UserObtainer.GetCurrentUserUsername(User.Claims));
-                if (id != user.ID)
-                {
-                    return Unauthorized();
                 }
 
                 if (this.UserExists(id))
@@ -293,15 +284,10 @@ namespace ESChatServer.Areas.v1.Controllers
                 {
                     return BadRequest(ModelState);
                 }
+
                 if (id != item.ID)
                 {
                     return BadRequest();
-                }
-
-                User user = await this._usersRepository.FindByUsernameAsync(UserObtainer.GetCurrentUserUsername(User.Claims));
-                if (id != user.ID)
-                {
-                    return Unauthorized();
                 }
 
                 if (this.UserExists(id))
@@ -328,72 +314,15 @@ namespace ESChatServer.Areas.v1.Controllers
             }
         }
         #endregion
-
-        #region HttpDelete (Delete)
-        [HttpDelete]
-        public IActionResult Delete(long id)
-        {
-            try
-            {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-
-                User user = this._usersRepository.Find(id);
-                if (user == null)
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    this._usersRepository.Remove(user, true);
-                    return Ok();
-                }                
-            }
-            catch (Exception ex)
-            {
-                //TODO: SaveException
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
-        [HttpDelete]
-        public async Task<IActionResult> DeleteAsync(long id)
-        {
-            try
-            {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-
-                User user = await this._usersRepository.FindAsync(id);
-                if (user == null)
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    await this._usersRepository.RemoveAsync(user, true);
-                    return Ok();
-                }
-            }
-            catch (Exception ex)
-            {
-                //TODO: SaveException
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
-        #endregion
     }
 
     public partial class UsersController
     {
-        protected bool UserExists(long id)
+        private bool UserExists(long id)
         {
             return this._usersRepository.Exists(id);
         }
-        protected async Task<bool> UserExistsAsync(long id)
+        private async Task<bool> UserExistsAsync(long id)
         {
             return await this._usersRepository.ExistsAsync(id);
         }

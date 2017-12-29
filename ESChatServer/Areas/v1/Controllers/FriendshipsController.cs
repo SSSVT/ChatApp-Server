@@ -11,7 +11,7 @@ namespace ESChatServer.Areas.v1.Controllers
 {
     [Produces("application/json")]
     [Area("v1")]
-    public partial class FriendshipsController : Controller
+    public sealed partial class FriendshipsController : Controller
     {
         #region Fields
         private readonly IFriendshipsRepository _friendshipsRepository;
@@ -218,49 +218,65 @@ namespace ESChatServer.Areas.v1.Controllers
         [HttpDelete]
         public IActionResult DeleteFriendship([FromRoute] Guid id)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState);
-            }
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
 
-            Friendship friendship = this._friendshipsRepository.Find(id);
-            if (friendship == null)
+                Friendship friendship = this._friendshipsRepository.Find(id);
+                if (friendship == null)
+                {
+                    return NotFound();
+                }
+
+                this._friendshipsRepository.Remove(friendship, true);
+
+                return Ok(friendship);
+            }
+            catch (Exception ex)
             {
-                return NotFound();
+                //TODO: SaveException
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
-
-            this._friendshipsRepository.Remove(friendship, true);
-
-            return Ok(friendship);
         }
         [HttpDelete]
         public async Task<IActionResult> DeleteFriendshipAsync([FromRoute] Guid id)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest(ModelState);
-            }
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
 
-            Friendship friendship = await this._friendshipsRepository.FindAsync(id);
-            if (friendship == null)
+                Friendship friendship = await this._friendshipsRepository.FindAsync(id);
+                if (friendship == null)
+                {
+                    return NotFound();
+                }
+
+                await this._friendshipsRepository.RemoveAsync(friendship, true);
+
+                return Ok(friendship);
+            }
+            catch (Exception ex)
             {
-                return NotFound();
-            }
-
-            await this._friendshipsRepository.RemoveAsync(friendship, true);
-
-            return Ok(friendship);
+                //TODO: SaveException
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }            
         }
         #endregion
     }
 
     public partial class FriendshipsController
     {
-        protected bool FriendshipExists(Guid id)
+        private bool FriendshipExists(Guid id)
         {
             return this._friendshipsRepository.Exists(id);
         }
-        protected async Task<bool> FriendshipExistsAsync(Guid id)
+        private async Task<bool> FriendshipExistsAsync(Guid id)
         {
             return await this._friendshipsRepository.ExistsAsync(id);
         }

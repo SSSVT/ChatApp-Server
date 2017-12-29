@@ -19,11 +19,12 @@ namespace ESChatServer.Areas.v1.Controllers
 {
     [Produces("application/json")]
     [Area("v1")]
-    public class TokenController : Controller
+    [AllowAnonymous]
+    public sealed class TokenController : Controller
     {
         #region Fields
-        private IConfiguration _config;
-        protected readonly IUsersRepository _usersRepository;
+        private readonly IConfiguration _config;
+        private readonly IUsersRepository _usersRepository;
         #endregion
 
         public TokenController(IConfiguration config, DatabaseContext context)
@@ -31,10 +32,9 @@ namespace ESChatServer.Areas.v1.Controllers
             this._config = config;
             this._usersRepository = new UsersRepository(context);
         }
-
-        [AllowAnonymous]
+        
         [HttpPost]
-        public async Task<IActionResult> LoginAsync([FromBody]LoginModel login)
+        public async Task<IActionResult> LoginAsync([FromBody] LoginModel login)
         {
             IActionResult response = Unauthorized();
             User user = await this.AuthenticateAsync(login);
@@ -55,7 +55,7 @@ namespace ESChatServer.Areas.v1.Controllers
             return response;
         }
 
-        protected JwtSecurityToken BuildToken(User user)
+        private JwtSecurityToken BuildToken(User user)
         {
             Claim[] claims = new[]
             {
@@ -78,7 +78,7 @@ namespace ESChatServer.Areas.v1.Controllers
             return token;
         }
 
-        protected async Task<User> AuthenticateAsync(LoginModel login)
+        private async Task<User> AuthenticateAsync(LoginModel login)
         {
             User user = await this._usersRepository.FindByUsernameAsync(login.Username);
 

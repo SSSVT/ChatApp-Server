@@ -5,16 +5,17 @@ using ESChatServer.Areas.v1.Models.Database.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ESChatServer.Areas.v1.Controllers
 {
     [Produces("application/json")]
     [Area("v1")]
-    public class ParticipantsController : Controller
+    public sealed partial class ParticipantsController : Controller
     {
         #region Fields
-        protected readonly IParticipantsRepository _participantsRepository;
+        private readonly IParticipantsRepository _participantsRepository;
         #endregion
 
         public ParticipantsController(DatabaseContext context)
@@ -33,7 +34,8 @@ namespace ESChatServer.Areas.v1.Controllers
                     return BadRequest(ModelState);
                 }
 
-                return Ok(this._participantsRepository.FindByUserID(id));
+                ICollection<Participant> participants = this._participantsRepository.FindByUserID(id);
+                return Ok(participants);
             }
             catch (Exception ex)
             {
@@ -51,7 +53,8 @@ namespace ESChatServer.Areas.v1.Controllers
                     return BadRequest(ModelState);
                 }
 
-                return Ok(await this._participantsRepository.FindByUserIDAsync(id));
+                ICollection<Participant> participants = await this._participantsRepository.FindByUserIDAsync(id);
+                return Ok(participants);
             }
             catch (Exception ex)
             {
@@ -70,7 +73,8 @@ namespace ESChatServer.Areas.v1.Controllers
                     return BadRequest(ModelState);
                 }
 
-                return Ok(this._participantsRepository.FindByRoomID(id));
+                ICollection<Participant> participants = this._participantsRepository.FindByRoomID(id);
+                return Ok(participants);
             }
             catch (Exception ex)
             {
@@ -88,7 +92,8 @@ namespace ESChatServer.Areas.v1.Controllers
                     return BadRequest(ModelState);
                 }
 
-                return Ok(await this._participantsRepository.FindByRoomIDAsync(id));
+                ICollection<Participant> participants = await this._participantsRepository.FindByRoomIDAsync(id);
+                return Ok(participants);
             }
             catch (Exception ex)
             {
@@ -100,7 +105,7 @@ namespace ESChatServer.Areas.v1.Controllers
 
         #region HttpPost (Create)
         [HttpPost]
-        public IActionResult Create([FromBody]Participant item)
+        public IActionResult PostParticipant([FromBody] Participant item)
         {
             try
             {
@@ -112,7 +117,7 @@ namespace ESChatServer.Areas.v1.Controllers
 
                 this._participantsRepository.Add(item, true);
 
-                return Ok();
+                return StatusCode(StatusCodes.Status201Created, item);
             }
             catch (Exception ex)
             {
@@ -121,7 +126,7 @@ namespace ESChatServer.Areas.v1.Controllers
             }
         }
         [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromBody]Participant item)
+        public async Task<IActionResult> PostParticipantAsync([FromBody] Participant item)
         {
             try
             {
@@ -133,74 +138,7 @@ namespace ESChatServer.Areas.v1.Controllers
 
                 await this._participantsRepository.AddAsync(item, true);
 
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                //TODO: SaveException
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
-        #endregion
-
-        #region HttpPut (Update)
-        [HttpPut]
-        public IActionResult Update([FromRoute] Guid id, [FromBody] Participant item)
-        {
-            try
-            {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-
-                if (id != item.ID)
-                {
-                    return BadRequest();
-                }
-
-                if (this._participantsRepository.Find(item.ID) != null)
-                {
-                    this._participantsRepository.Update(item, true);
-                }
-                else
-                {
-                    return BadRequest(ModelState);
-                }
-
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                //TODO: SaveException
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
-        [HttpPut]
-        public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] Participant item)
-        {
-            try
-            {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-
-                if (id != item.ID)
-                {
-                    return BadRequest();
-                }
-
-                if (await this._participantsRepository.FindAsync(item.ID) != null)
-                {
-                    await this._participantsRepository.UpdateAsync(item, true);
-                }
-                else
-                {
-                    return BadRequest(ModelState);
-                }
-
-                return NoContent();
+                return StatusCode(StatusCodes.Status201Created, item);
             }
             catch (Exception ex)
             {
@@ -212,7 +150,7 @@ namespace ESChatServer.Areas.v1.Controllers
 
         #region HttpDelete (Delete)
         [HttpDelete]
-        public IActionResult Delete(Guid id)
+        public IActionResult DeleteParticipant([FromRoute] Guid id)
         {
             try
             {
@@ -224,7 +162,7 @@ namespace ESChatServer.Areas.v1.Controllers
                 Participant item = this._participantsRepository.Find(id);
                 this._participantsRepository.Remove(item, true);
 
-                return Ok();
+                return Ok(item);
             }
             catch (Exception ex)
             {
@@ -233,7 +171,7 @@ namespace ESChatServer.Areas.v1.Controllers
             }
         }
         [HttpDelete]
-        public async Task<IActionResult> DeleteAsync(Guid id)
+        public async Task<IActionResult> DeleteParticipantAsync([FromRoute] Guid id)
         {
             try
             {
@@ -245,7 +183,7 @@ namespace ESChatServer.Areas.v1.Controllers
                 Participant item = await this._participantsRepository.FindAsync(id);
                 await this._participantsRepository.RemoveAsync(item, true);
 
-                return Ok();
+                return Ok(item);
             }
             catch (Exception ex)
             {
@@ -254,5 +192,17 @@ namespace ESChatServer.Areas.v1.Controllers
             }
         }
         #endregion
+    }
+
+    public partial class ParticipantsController
+    {
+        private bool ParticipantExists(Guid id)
+        {
+            return this._participantsRepository.Exists(id);
+        }
+        private async Task<bool> ParticipantExistsAsync(Guid id)
+        {
+            return await this._participantsRepository.ExistsAsync(id);
+        }
     }
 }

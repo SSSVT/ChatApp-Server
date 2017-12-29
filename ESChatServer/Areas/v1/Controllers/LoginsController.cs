@@ -11,7 +11,7 @@ namespace ESChatServer.Areas.v1.Controllers
 {
     [Produces("application/json")]
     [Area("v1")]
-    public class LoginsController : Controller
+    public sealed class LoginsController : Controller
     {
         #region Fields
         private readonly ILoginsRepository _loginsRepository;
@@ -147,14 +147,6 @@ namespace ESChatServer.Areas.v1.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
-        #endregion
-
-        #region HttpPost (Create)
-        //Not supported
-        #endregion
-
-        #region HttpPut (Update)
-        //Not supported
         #endregion
 
         #region HttpDelete (Delete)

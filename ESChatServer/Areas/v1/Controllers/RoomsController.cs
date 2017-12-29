@@ -1,23 +1,21 @@
-﻿using ESChatServer.Areas.v1.Models.Application.Objects;
-using ESChatServer.Areas.v1.Models.Database;
+﻿using ESChatServer.Areas.v1.Models.Database;
 using ESChatServer.Areas.v1.Models.Database.Entities;
 using ESChatServer.Areas.v1.Models.Database.Interfaces;
 using ESChatServer.Areas.v1.Models.Database.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ESChatServer.Areas.v1.Controllers
 {
     [Produces("application/json")]
     [Area("v1")]
-    public class RoomsController : Controller
+    public sealed partial class RoomsController : Controller
     {
         #region Fields
-        protected readonly IRoomsRepository _roomsRepository;
-        protected readonly IUsersRepository _usersRepository;
+        private readonly IRoomsRepository _roomsRepository;
+        private readonly IUsersRepository _usersRepository;
         #endregion
 
         public RoomsController(DatabaseContext context)
@@ -28,7 +26,7 @@ namespace ESChatServer.Areas.v1.Controllers
 
         #region HttpGet (Select)
         [HttpGet]
-        public IActionResult Find(long id)
+        public IActionResult Find([FromRoute] long id)
         {
             try
             {
@@ -38,14 +36,11 @@ namespace ESChatServer.Areas.v1.Controllers
                 }
 
                 Room result = this._roomsRepository.Find(id);
-                if (result != null)
+                if (result == null)
                 {
-                    return Ok(result);
+                    return NotFound(id);
                 }
-                else
-                {
-                    return NotFound();
-                }
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -54,7 +49,7 @@ namespace ESChatServer.Areas.v1.Controllers
             }
         }
         [HttpGet]
-        public async Task<IActionResult> FindAsync(long id)
+        public async Task<IActionResult> FindAsync([FromRoute] long id)
         {
             try
             {
@@ -64,14 +59,11 @@ namespace ESChatServer.Areas.v1.Controllers
                 }
 
                 Room result = await this._roomsRepository.FindAsync(id);
-                if (result != null)
+                if (result == null)
                 {
-                    return Ok(result);
+                    return NotFound(id);
                 }
-                else
-                {
-                    return NotFound();
-                }
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -98,7 +90,6 @@ namespace ESChatServer.Areas.v1.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
-
         [HttpGet]
         public async Task<IActionResult> FindAllAsync()
         {
@@ -121,28 +112,21 @@ namespace ESChatServer.Areas.v1.Controllers
 
         #region HttpPost (Create)
         [HttpPost]
-        public IActionResult Create([FromBody]Room item)
+        public IActionResult Create([FromBody] Room item)
         {
             try
             {
                 ModelState.Remove("ID"); //Remove property from model validation
+                ModelState.Remove("UTCCreationDate");
                 if (!ModelState.IsValid)
                 {
                     return BadRequest(ModelState);
                 }
+                item.UTCCreationDate = DateTime.UtcNow;
 
-                //Check authenticated user ID
-                User user = this._usersRepository.FindByUsername(UserObtainer.GetCurrentUserUsername(User.Claims));
+                this._roomsRepository.Add(item, true);
 
-                if (item.IDOwner == user.ID)
-                {
-                    this._roomsRepository.Add(item, true);
-                    return Ok();
-                }
-                else
-                {
-                    return Unauthorized();
-                }                
+                return CreatedAtAction("Find", new { id = item.ID }, item);
             }
             catch (Exception ex)
             {
@@ -151,28 +135,21 @@ namespace ESChatServer.Areas.v1.Controllers
             }            
         }
         [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromBody]Room item)
+        public async Task<IActionResult> CreateAsync([FromBody] Room item)
         {
             try
             {
                 ModelState.Remove("ID"); //Remove property from model validation
+                ModelState.Remove("UTCCreationDate");
                 if (!ModelState.IsValid)
                 {
                     return BadRequest(ModelState);
                 }
+                item.UTCCreationDate = DateTime.UtcNow;
 
-                //Check authenticated user ID
-                User user = this._usersRepository.FindByUsername(UserObtainer.GetCurrentUserUsername(User.Claims));
+                await this._roomsRepository.AddAsync(item, true);
 
-                if (item.IDOwner == user.ID)
-                {
-                    await this._roomsRepository.AddAsync(item, true);
-                    return Ok();
-                }
-                else
-                {
-                    return Unauthorized();
-                }
+                return CreatedAtAction("FindAsync", new { id = item.ID }, item);
             }
             catch (Exception ex)
             {
@@ -184,27 +161,31 @@ namespace ESChatServer.Areas.v1.Controllers
 
         #region HttpPut (Update)
         [HttpPut]
-        public IActionResult Update([FromBody]Room item)
+        public IActionResult Update([FromRoute] long id, [FromBody] Room item)
         {
             try
             {
+                ModelState.Remove("UTCCreationDate");
                 if (!ModelState.IsValid)
                 {
                     return BadRequest(ModelState);
                 }
 
-                //Check authenticated user ID
-                User user = this._usersRepository.FindByUsername(UserObtainer.GetCurrentUserUsername(User.Claims));
+                if (id != item.ID)
+                {
+                    return BadRequest();
+                }
 
-                if (item.IDOwner == user.ID)
+                if (this.RoomExists(id))
                 {
                     this._roomsRepository.Update(item, true);
-                    return Ok();
                 }
                 else
                 {
-                    return Unauthorized();
+                    return BadRequest(id);
                 }
+
+                return NoContent();
             }
             catch (Exception ex)
             {
@@ -213,27 +194,31 @@ namespace ESChatServer.Areas.v1.Controllers
             }
         }
         [HttpPut]
-        public async Task<IActionResult> UpdateAsync([FromBody]Room item)
+        public async Task<IActionResult> UpdateAsync([FromRoute] long id, [FromBody] Room item)
         {
             try
             {
+                ModelState.Remove("UTCCreationDate");
                 if (!ModelState.IsValid)
                 {
                     return BadRequest(ModelState);
                 }
 
-                //Check authenticated user ID
-                User user = this._usersRepository.FindByUsername(UserObtainer.GetCurrentUserUsername(User.Claims));
+                if (id != item.ID)
+                {
+                    return BadRequest();
+                }
 
-                if (item.IDOwner == user.ID)
+                if (await this.RoomExistsAsync(id))
                 {
                     await this._roomsRepository.UpdateAsync(item, true);
-                    return Ok();
                 }
                 else
                 {
-                    return Unauthorized();
+                    return BadRequest(id);
                 }
+
+                return NoContent();
             }
             catch (Exception ex)
             {
@@ -245,7 +230,7 @@ namespace ESChatServer.Areas.v1.Controllers
 
         #region HttpDelete (Delete)
         [HttpDelete]
-        public IActionResult Delete(int id)
+        public IActionResult Delete([FromRoute] int id)
         {
             try
             {
@@ -254,19 +239,15 @@ namespace ESChatServer.Areas.v1.Controllers
                     return BadRequest(ModelState);
                 }
 
-                //Check authenticated user ID
-                User user = this._usersRepository.FindByUsername(UserObtainer.GetCurrentUserUsername(User.Claims));
                 Room item = this._roomsRepository.Find(id);
+                if (item == null)
+                {
+                    return BadRequest(id);
+                }
 
-                if (item.IDOwner == user.ID)
-                {
-                    this._roomsRepository.Remove(item, true);
-                    return Ok();
-                }
-                else
-                {
-                    return Unauthorized();
-                }
+                this._roomsRepository.Remove(item, true);
+
+                return Ok(item);
             }
             catch (Exception ex)
             {
@@ -275,7 +256,7 @@ namespace ESChatServer.Areas.v1.Controllers
             }
         }
         [HttpDelete]
-        public async Task<IActionResult> DeleteAsync(int id)
+        public async Task<IActionResult> DeleteAsync([FromRoute] int id)
         {
             try
             {
@@ -284,19 +265,15 @@ namespace ESChatServer.Areas.v1.Controllers
                     return BadRequest(ModelState);
                 }
 
-                //Check authenticated user ID
-                User user = this._usersRepository.FindByUsername(UserObtainer.GetCurrentUserUsername(User.Claims));
                 Room item = await this._roomsRepository.FindAsync(id);
+                if (item == null)
+                {
+                    return BadRequest(id);
+                }
 
-                if (item.IDOwner == user.ID)
-                {
-                    await this._roomsRepository.RemoveAsync(item, true);
-                    return Ok();
-                }
-                else
-                {
-                    return Unauthorized();
-                }
+                await this._roomsRepository.RemoveAsync(item, true);
+
+                return Ok(item);
             }
             catch (Exception ex)
             {
@@ -305,5 +282,17 @@ namespace ESChatServer.Areas.v1.Controllers
             }
         }
         #endregion
+    }
+
+    public partial class RoomsController
+    {
+        private bool RoomExists(long id)
+        {
+            return this._roomsRepository.Exists(id);
+        }
+        private async Task<bool> RoomExistsAsync(long id)
+        {
+            return await this._roomsRepository.ExistsAsync(id);
+        }
     }
 }
