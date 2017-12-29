@@ -48,6 +48,14 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
 
         public override void Remove(Room item, bool saveChanges)
         {
+            IParticipantsRepository participantsRepository = new ParticipantsRepository(this._DatabaseContext);
+
+            ICollection<Participant> participants = participantsRepository.FindByRoomID(item.ID);
+            foreach (var entity in participants)
+            {
+                participantsRepository.Remove(entity, false);
+            }
+
             this._DatabaseContext.Rooms.Remove(item);
 
             if (saveChanges)
@@ -55,6 +63,14 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
         }
         public override async Task RemoveAsync(Room item, bool saveChanges)
         {
+            IParticipantsRepository participantsRepository = new ParticipantsRepository(this._DatabaseContext);
+
+            ICollection<Participant> participants = await participantsRepository.FindByRoomIDAsync(item.ID);
+            foreach (var entity in participants)
+            {
+                await participantsRepository.RemoveAsync(entity, false);
+            }
+
             this._DatabaseContext.Rooms.Remove(item);
 
             if (saveChanges)
@@ -94,11 +110,23 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
 
         public virtual ICollection<Room> FindByUserID(long id)
         {
-            throw new System.NotImplementedException();
+            ICollection<Room> result = (from p in this._DatabaseContext.Participants
+                          join r in this._DatabaseContext.Rooms on p.IDRoom equals r.ID
+                          join u in this._DatabaseContext.Users on p.IDUser equals u.ID
+                          where u.ID == id
+                          select r
+                          ).ToList();
+            return result;
         }
         public virtual async Task<ICollection<Room>> FindByUserIDAsync(long id)
         {
-            throw new System.NotImplementedException();
+            ICollection<Room> result = await (from p in this._DatabaseContext.Participants
+                                        join r in this._DatabaseContext.Rooms on p.IDRoom equals r.ID
+                                        join u in this._DatabaseContext.Users on p.IDUser equals u.ID
+                                        where u.ID == id
+                                        select r
+                          ).ToListAsync();
+            return result;
         }
 
         public override bool Exists(object id)

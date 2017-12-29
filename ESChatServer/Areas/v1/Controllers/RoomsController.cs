@@ -108,6 +108,43 @@ namespace ESChatServer.Areas.v1.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+
+        [HttpGet]
+        public IActionResult FindByUserID(long id)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                return Ok(this._roomsRepository.FindByUserID(id));
+            }
+            catch (Exception ex)
+            {
+                //TODO: SaveException
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+        [HttpGet]
+        public async Task<IActionResult> FindByUserIDAsync(long id)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                return Ok(await this._roomsRepository.FindByUserIDAsync(id));
+            }
+            catch (Exception ex)
+            {
+                //TODO: SaveException
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
         #endregion
 
         #region HttpPost (Create)
@@ -182,7 +219,7 @@ namespace ESChatServer.Areas.v1.Controllers
                 }
                 else
                 {
-                    return BadRequest(id);
+                    return BadRequest(new { id, item });
                 }
 
                 return NoContent();
@@ -215,7 +252,7 @@ namespace ESChatServer.Areas.v1.Controllers
                 }
                 else
                 {
-                    return BadRequest(id);
+                    return BadRequest(new { id, item });
                 }
 
                 return NoContent();
@@ -230,7 +267,7 @@ namespace ESChatServer.Areas.v1.Controllers
 
         #region HttpDelete (Delete)
         [HttpDelete]
-        public IActionResult Delete([FromRoute] int id)
+        public IActionResult Delete([FromRoute] long id)
         {
             try
             {
@@ -256,7 +293,7 @@ namespace ESChatServer.Areas.v1.Controllers
             }
         }
         [HttpDelete]
-        public async Task<IActionResult> DeleteAsync([FromRoute] int id)
+        public async Task<IActionResult> DeleteAsync([FromRoute] long id)
         {
             try
             {
