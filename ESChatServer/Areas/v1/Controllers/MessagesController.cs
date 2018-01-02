@@ -76,7 +76,7 @@ namespace ESChatServer.Areas.v1.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetByRoomID([FromRoute] long id, [FromBody] DateTime lastMessageTime)
+        public IActionResult GetByRoomID([FromRoute] long id, [FromRoute] DateTime lastMessageTime)
         {
             try
             {
@@ -100,7 +100,7 @@ namespace ESChatServer.Areas.v1.Controllers
             }
         }
         [HttpGet]
-        public async Task<IActionResult> GetByRoomIDAsync([FromRoute] long id, [FromBody] DateTime lastMessageTime)
+        public async Task<IActionResult> GetByRoomIDAsync([FromRoute] long id, [FromRoute] DateTime lastMessageTime)
         {
             try
             {
