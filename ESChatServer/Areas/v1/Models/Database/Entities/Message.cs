@@ -18,6 +18,8 @@ namespace ESChatServer.Areas.v1.Models.Database.Entities
         [Required]
         public DateTime? UTCSend { get; set; }
 
+        public DateTime? UTCServerReceived { get; set; }
+
         [Required]
         public string Content { get; set; }
 

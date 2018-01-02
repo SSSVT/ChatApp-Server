@@ -1,6 +1,7 @@
 ﻿using ESChatServer.Areas.v1.Models.Database.Entities;
 using ESChatServer.Areas.v1.Models.Database.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -101,13 +102,13 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
             return await this._DatabaseContext.Messages.Where(x => x.IDUser == id).ToListAsync();
         }
 
-        public ICollection<Message> FindByRoomID(long id)
+        public ICollection<Message> FindByRoomID(long id, DateTime time)
         {
-            return this._DatabaseContext.Messages.Where(x => x.IDRoom == id).ToList();
+            return this._DatabaseContext.Messages.Where(x => x.IDRoom == id && x.UTCServerReceived > time).ToList();
         }
-        public async Task<ICollection<Message>> FindByRoomIDAsync(long id)
+        public async Task<ICollection<Message>> FindByRoomIDAsync(long id, DateTime time)
         {
-            return await this._DatabaseContext.Messages.Where(x => x.IDRoom == id).ToListAsync();
+            return await this._DatabaseContext.Messages.Where(x => x.IDRoom == id && x.UTCServerReceived > time).ToListAsync();
         }
 
         public override bool Exists(object id)

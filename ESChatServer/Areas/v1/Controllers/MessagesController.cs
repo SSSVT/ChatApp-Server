@@ -25,6 +25,7 @@ namespace ESChatServer.Areas.v1.Controllers
         }
 
         #region HttpGet (Select)
+        //TODO: Is these methods userful?
         [HttpGet]
         public IActionResult GetByUserID([FromRoute] long id)
         {
@@ -75,7 +76,7 @@ namespace ESChatServer.Areas.v1.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetByRoomID([FromRoute] long id)
+        public IActionResult GetByRoomID([FromRoute] long id, [FromBody] DateTime lastMessageTime)
         {
             try
             {
@@ -84,7 +85,7 @@ namespace ESChatServer.Areas.v1.Controllers
                     return BadRequest(ModelState);
                 }
 
-                ICollection<Message> messages = this._messagesRepository.FindByRoomID(id);
+                ICollection<Message> messages = this._messagesRepository.FindByRoomID(id, lastMessageTime);
                 if (messages.Count == 0)
                 {
                     return NotFound();
@@ -99,7 +100,7 @@ namespace ESChatServer.Areas.v1.Controllers
             }
         }
         [HttpGet]
-        public async Task<IActionResult> GetByRoomIDAsync([FromRoute] long id)
+        public async Task<IActionResult> GetByRoomIDAsync([FromRoute] long id, [FromBody] DateTime lastMessageTime)
         {
             try
             {
@@ -108,7 +109,7 @@ namespace ESChatServer.Areas.v1.Controllers
                     return BadRequest(ModelState);
                 }
 
-                ICollection<Message> messages = await this._messagesRepository.FindByRoomIDAsync(id);
+                ICollection<Message> messages = await this._messagesRepository.FindByRoomIDAsync(id, lastMessageTime);
                 if (messages.Count == 0)
                 {
                     return NotFound();

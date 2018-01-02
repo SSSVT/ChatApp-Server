@@ -117,6 +117,10 @@ namespace ESChatServer.Areas.v1.Models.Database
                 .HasColumnName("SENT_UTC");
 
             modelBuilder.Entity<Message>()
+                .Property(x => x.UTCServerReceived)
+                .HasColumnName("SERVER_RECEIVED_UTC");
+
+            modelBuilder.Entity<Message>()
                 .Property(x => x.Content)
                 .HasColumnName("CONTENT");
 

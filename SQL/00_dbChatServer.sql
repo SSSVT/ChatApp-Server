@@ -77,6 +77,7 @@ CREATE TABLE [es_tbMessages](
 	IDes_tbRooms bigint not null,
 	IDes_tbUsers bigint not null,
 	SENT_UTC datetime not null,
+	SERVER_RECEIVED_UTC datetime not null,
 	CONTENT nvarchar(max) not null
 );
 ALTER TABLE [es_tbMessages] ADD CONSTRAINT PK_es_tbMessages_ID PRIMARY KEY (ID);
