@@ -51,6 +51,33 @@ namespace ESChatServer.Areas.v1.Controllers
         }
 
         [HttpGet]
+        public IActionResult GetFriendshipsRequestsByUserID([FromRoute] long id)
+        {
+            try
+            {
+                return Ok(this._friendshipsRepository.FindRequestsByUserID(id));
+            }
+            catch (Exception ex)
+            {
+                //TODO: SaveException
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetFriendshipsRequestsByUserIDAsync([FromRoute] long id)
+        {
+            try
+            {
+                return Ok(await this._friendshipsRepository.FindRequestsByUserIDAsync(id));
+            }
+            catch (Exception ex)
+            {
+                //TODO: SaveException
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet]
         public IActionResult GetFriendship([FromRoute] Guid id)
         {
             try

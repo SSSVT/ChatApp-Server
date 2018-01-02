@@ -109,5 +109,14 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
         {
             return await this.FindAsync(id) != null;
         }
+
+        public ICollection<Friendship> FindRequestsByUserID(long id)
+        {
+            return this._DatabaseContext.Friendships.Where(x => x.UTCAccepted == null).ToList();
+        }
+        public async Task<ICollection<Friendship>> FindRequestsByUserIDAsync(long id)
+        {
+            return await this._DatabaseContext.Friendships.Where(x => x.UTCAccepted == null).ToListAsync();
+        }
     }
 }
