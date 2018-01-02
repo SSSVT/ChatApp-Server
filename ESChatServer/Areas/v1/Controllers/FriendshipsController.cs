@@ -24,11 +24,11 @@ namespace ESChatServer.Areas.v1.Controllers
 
         #region HttpGet (Select)
         [HttpGet]
-        public IActionResult GetFriendshipsByUserID([FromRoute] long id)
+        public IActionResult GetAcceptedByUserID([FromRoute] long id)
         {
             try
             {
-                return Ok(this._friendshipsRepository.FindByUserID(id));
+                return Ok(this._friendshipsRepository.FindAcceptedByUserID(id));
             }
             catch (Exception ex)
             {
@@ -37,11 +37,11 @@ namespace ESChatServer.Areas.v1.Controllers
             }            
         }
         [HttpGet]
-        public async Task<IActionResult> GetFriendshipsByUserIDAsync([FromRoute] long id)
+        public async Task<IActionResult> GetAcceptedByUserIDAsync([FromRoute] long id)
         {
             try
             {
-                return Ok(await this._friendshipsRepository.FindByUserIDAsync(id));
+                return Ok(await this._friendshipsRepository.FindAcceptedByUserIDAsync(id));
             }
             catch (Exception ex)
             {
@@ -51,11 +51,11 @@ namespace ESChatServer.Areas.v1.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetFriendshipsRequestsByUserID([FromRoute] long id)
+        public IActionResult GetPendingByUserID([FromRoute] long id)
         {
             try
             {
-                return Ok(this._friendshipsRepository.FindRequestsByUserID(id));
+                return Ok(this._friendshipsRepository.FindPendingByUserID(id));
             }
             catch (Exception ex)
             {
@@ -64,11 +64,11 @@ namespace ESChatServer.Areas.v1.Controllers
             }
         }
         [HttpGet]
-        public async Task<IActionResult> GetFriendshipsRequestsByUserIDAsync([FromRoute] long id)
+        public async Task<IActionResult> GetPendingByUserIDAsync([FromRoute] long id)
         {
             try
             {
-                return Ok(await this._friendshipsRepository.FindRequestsByUserIDAsync(id));
+                return Ok(await this._friendshipsRepository.FindPendingByUserIDAsync(id));
             }
             catch (Exception ex)
             {

@@ -92,13 +92,13 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
                 await this.SaveChangesAsync();
         }
 
-        public ICollection<Friendship> FindByUserID(long id)
+        public ICollection<Friendship> FindAcceptedByUserID(long id)
         {
-            return this._DatabaseContext.Friendships.Where(x => x.IDSender == id || x.IDRecipient == id).ToList();
+            return this._DatabaseContext.Friendships.Where(x => (x.IDSender == id || x.IDRecipient == id) && x.UTCAccepted != null).ToList();
         }
-        public async Task<ICollection<Friendship>> FindByUserIDAsync(long id)
+        public async Task<ICollection<Friendship>> FindAcceptedByUserIDAsync(long id)
         {
-            return await this._DatabaseContext.Friendships.Where(x => x.IDSender == id || x.IDRecipient == id).ToListAsync();
+            return await this._DatabaseContext.Friendships.Where(x => (x.IDSender == id || x.IDRecipient == id) && x.UTCAccepted != null).ToListAsync();
         }
 
         public override bool Exists(object id)
@@ -110,13 +110,13 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
             return await this.FindAsync(id) != null;
         }
 
-        public ICollection<Friendship> FindRequestsByUserID(long id)
+        public ICollection<Friendship> FindPendingByUserID(long id)
         {
-            return this._DatabaseContext.Friendships.Where(x => x.UTCAccepted == null).ToList();
+            return this._DatabaseContext.Friendships.Where(x => (x.IDSender == id || x.IDRecipient == id) && x.UTCAccepted == null).ToList();
         }
-        public async Task<ICollection<Friendship>> FindRequestsByUserIDAsync(long id)
+        public async Task<ICollection<Friendship>> FindPendingByUserIDAsync(long id)
         {
-            return await this._DatabaseContext.Friendships.Where(x => x.UTCAccepted == null).ToListAsync();
+            return await this._DatabaseContext.Friendships.Where(x => (x.IDSender == id || x.IDRecipient == id) && x.UTCAccepted == null).ToListAsync();
         }
     }
 }
