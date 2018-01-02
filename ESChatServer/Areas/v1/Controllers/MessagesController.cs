@@ -137,6 +137,7 @@ namespace ESChatServer.Areas.v1.Controllers
                     return BadRequest(ModelState);
                 }
 
+                item.UTCServerReceived = DateTime.UtcNow;
                 this._messagesRepository.Add(item, true);
                 return StatusCode(StatusCodes.Status201Created);
             }
@@ -157,6 +158,7 @@ namespace ESChatServer.Areas.v1.Controllers
                     return BadRequest(ModelState);
                 }
 
+                item.UTCServerReceived = DateTime.UtcNow;
                 await this._messagesRepository.AddAsync(item, true);
                 return StatusCode(StatusCodes.Status201Created);
             }
