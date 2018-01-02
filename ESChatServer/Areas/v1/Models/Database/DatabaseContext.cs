@@ -48,8 +48,8 @@ namespace ESChatServer.Areas.v1.Models.Database
                 .HasColumnName("IDes_tbUsers_RECIPIENT");
 
             modelBuilder.Entity<Friendship>()
-                .Property(x => x.UTCSend)
-                .HasColumnName("REQUEST_SEND_UTC");
+                .Property(x => x.UTCServerReceived)
+                .HasColumnName("REQUEST_SERVER_RECEIVED_UTC");
 
             modelBuilder.Entity<Friendship>()
                 .Property(x => x.UTCAccepted)

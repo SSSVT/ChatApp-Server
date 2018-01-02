@@ -136,11 +136,13 @@ namespace ESChatServer.Areas.v1.Controllers
             try
             {
                 ModelState.Remove("ID");
+                ModelState.Remove("UTCServerReceived");
                 if (!ModelState.IsValid)
                 {
                     return BadRequest(ModelState);
                 }
 
+                friendship.UTCServerReceived = DateTime.UtcNow;
                 this._friendshipsRepository.Add(friendship, true);
 
                 return CreatedAtAction("GetFriendship", new { id = friendship.ID }, friendship);

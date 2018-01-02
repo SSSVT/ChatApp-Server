@@ -66,7 +66,7 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
             Friendship friendship = this.Find(item.ID);
             friendship.IDSender = item.IDSender;
             friendship.IDRecipient = item.IDRecipient;
-            friendship.UTCSend = item.UTCSend;
+            friendship.UTCServerReceived = item.UTCServerReceived;
             friendship.UTCAccepted = item.UTCAccepted;
 
             //TODO: Update virtual properties?
@@ -81,7 +81,7 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
             Friendship friendship = await this.FindAsync(item.ID);
             friendship.IDSender = item.IDSender;
             friendship.IDRecipient = item.IDRecipient;
-            friendship.UTCSend = item.UTCSend;
+            friendship.UTCServerReceived = item.UTCServerReceived;
             friendship.UTCAccepted = item.UTCAccepted;
 
             //TODO: Update virtual properties?
