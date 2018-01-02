@@ -165,6 +165,7 @@ namespace ESChatServer.Areas.v1.Controllers
                     return BadRequest(ModelState);
                 }
 
+                friendship.UTCServerReceived = DateTime.UtcNow;
                 await this._friendshipsRepository.AddAsync(friendship, true);
 
                 return CreatedAtAction("GetFriendshipAsync", new { id = friendship.ID }, friendship);
