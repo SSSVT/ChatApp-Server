@@ -45,5 +45,7 @@ namespace ESChatServer.Areas.v1.Models.Database.Entities
         public ICollection<Room> OwnedRooms { get; set; }
         public ICollection<Participant> Participants { get; set; }
         public ICollection<Message> Messages { get; set; }
+        public ICollection<Friendship> SentFriendships { get; set; }
+        public ICollection<Friendship> ReceivedFriendships { get; set; }
     }
 }

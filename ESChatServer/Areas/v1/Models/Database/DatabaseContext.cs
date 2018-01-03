@@ -54,6 +54,18 @@ namespace ESChatServer.Areas.v1.Models.Database
             modelBuilder.Entity<Friendship>()
                 .Property(x => x.UTCAccepted)
                 .HasColumnName("REQUEST_ACCEPTED_UTC");
+
+            modelBuilder.Entity<Friendship>()
+                .HasOne(f => f.Sender)
+                .WithMany(s => s.SentFriendships)
+                .HasForeignKey(f => f.IDSender)
+                .HasConstraintName("FK_es_tbFriendships_IDes_tbUsers_SENDER");
+
+            modelBuilder.Entity<Friendship>()
+                .HasOne(f => f.Recipient)
+                .WithMany(r => r.ReceivedFriendships)
+                .HasForeignKey(f => f.IDRecipient)
+                .HasConstraintName("FK_es_tbFriendships_IDes_tbUsers_RECIPIENT");
             #endregion
             #region Login
             modelBuilder.Entity<Login>()

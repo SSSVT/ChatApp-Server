@@ -34,7 +34,7 @@ namespace ESChatServer.Areas.v1.Controllers
             {
                 //TODO: SaveException
                 return StatusCode(StatusCodes.Status500InternalServerError);
-            }            
+            }
         }
         [HttpGet]
         public async Task<IActionResult> GetAcceptedByUserIDAsync([FromRoute] long id)
@@ -51,11 +51,11 @@ namespace ESChatServer.Areas.v1.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetPendingByUserID([FromRoute] long id)
+        public IActionResult GetReceivedAndPendingByUserID([FromRoute] long id)
         {
             try
             {
-                return Ok(this._friendshipsRepository.FindPendingByUserID(id));
+                return Ok(this._friendshipsRepository.FindReceivedAndPendingByUserID(id));
             }
             catch (Exception ex)
             {
@@ -64,11 +64,11 @@ namespace ESChatServer.Areas.v1.Controllers
             }
         }
         [HttpGet]
-        public async Task<IActionResult> GetPendingByUserIDAsync([FromRoute] long id)
+        public async Task<IActionResult> GetReceivedAndPendingByUserIDAsync([FromRoute] long id)
         {
             try
             {
-                return Ok(await this._friendshipsRepository.FindPendingByUserIDAsync(id));
+                return Ok(await this._friendshipsRepository.FindReceivedAndPendingByUserIDAsync(id));
             }
             catch (Exception ex)
             {

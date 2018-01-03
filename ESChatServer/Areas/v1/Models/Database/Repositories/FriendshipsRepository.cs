@@ -92,15 +92,6 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
                 await this.SaveChangesAsync();
         }
 
-        public ICollection<Friendship> FindAcceptedByUserID(long id)
-        {
-            return this._DatabaseContext.Friendships.Where(x => (x.IDSender == id || x.IDRecipient == id) && x.UTCAccepted != null).ToList();
-        }
-        public async Task<ICollection<Friendship>> FindAcceptedByUserIDAsync(long id)
-        {
-            return await this._DatabaseContext.Friendships.Where(x => (x.IDSender == id || x.IDRecipient == id) && x.UTCAccepted != null).ToListAsync();
-        }
-
         public override bool Exists(object id)
         {
             return this.Find(id) != null;
@@ -110,13 +101,22 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
             return await this.FindAsync(id) != null;
         }
 
-        public ICollection<Friendship> FindPendingByUserID(long id)
+        public ICollection<Friendship> FindReceivedAndPendingByUserID(long id)
         {
             return this._DatabaseContext.Friendships.Where(x => (x.IDSender == id || x.IDRecipient == id) && x.UTCAccepted == null).ToList();
         }
-        public async Task<ICollection<Friendship>> FindPendingByUserIDAsync(long id)
+        public async Task<ICollection<Friendship>> FindReceivedAndPendingByUserIDAsync(long id)
         {
             return await this._DatabaseContext.Friendships.Where(x => (x.IDSender == id || x.IDRecipient == id) && x.UTCAccepted == null).ToListAsync();
+        }
+
+        public ICollection<Friendship> FindAcceptedByUserID(long id)
+        {
+            return this._DatabaseContext.Friendships.Where(x => (x.IDSender == id || x.IDRecipient == id) && x.UTCAccepted != null).ToList();
+        }
+        public async Task<ICollection<Friendship>> FindAcceptedByUserIDAsync(long id)
+        {
+            return await this._DatabaseContext.Friendships.Where(x => (x.IDSender == id || x.IDRecipient == id) && x.UTCAccepted != null).ToListAsync();
         }
     }
 }
