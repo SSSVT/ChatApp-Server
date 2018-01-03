@@ -137,6 +137,7 @@ namespace ESChatServer.Areas.v1.Controllers
             {
                 ModelState.Remove("ID");
                 ModelState.Remove("UTCServerReceived");
+                ModelState.Remove("UTCAccepted");
                 if (!ModelState.IsValid)
                 {
                     return BadRequest(ModelState);
@@ -160,6 +161,7 @@ namespace ESChatServer.Areas.v1.Controllers
             {
                 ModelState.Remove("ID");
                 ModelState.Remove("UTCServerReceived");
+                ModelState.Remove("UTCAccepted");
                 if (!ModelState.IsValid)
                 {
                     return BadRequest(ModelState);
