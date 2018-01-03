@@ -103,11 +103,11 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
 
         public ICollection<Friendship> FindReceivedAndPendingByUserID(long id)
         {
-            return this._DatabaseContext.Friendships.Where(x => (x.IDSender == id || x.IDRecipient == id) && x.UTCAccepted == null).ToList();
+            return this._DatabaseContext.Friendships.Where(x => x.IDRecipient == id && x.UTCAccepted == null).ToList();
         }
         public async Task<ICollection<Friendship>> FindReceivedAndPendingByUserIDAsync(long id)
         {
-            return await this._DatabaseContext.Friendships.Where(x => (x.IDSender == id || x.IDRecipient == id) && x.UTCAccepted == null).ToListAsync();
+            return await this._DatabaseContext.Friendships.Where(x => x.IDRecipient == id && x.UTCAccepted == null).ToListAsync();
         }
 
         public ICollection<Friendship> FindAcceptedByUserID(long id)

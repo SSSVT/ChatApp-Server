@@ -90,7 +90,7 @@ CREATE TABLE [es_tbFriendships](
 	IDes_tbUsers_RECIPIENT bigint not null,
 
 	REQUEST_SERVER_RECEIVED_UTC datetime not null,
-	REQUEST_ACCEPTED_UTC datetime not null,
+	REQUEST_ACCEPTED_UTC datetime,
 );
 ALTER TABLE [es_tbFriendships] ADD CONSTRAINT PK_es_tbFriendships_ID PRIMARY KEY NONCLUSTERED (ID);
 ALTER TABLE [es_tbFriendships] ADD CONSTRAINT DF_es_tbFriendships_ID DEFAULT (NEWID()) FOR ID;
