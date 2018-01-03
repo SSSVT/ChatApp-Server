@@ -16,12 +16,14 @@ namespace ESChatServer.Areas.v1.Controllers
         #region Fields
         private readonly IRoomsRepository _roomsRepository;
         private readonly IUsersRepository _usersRepository;
+        private readonly IParticipantsRepository _participantsRepository;
         #endregion
 
         public RoomsController(DatabaseContext context)
         {
             this._roomsRepository = new RoomsRepository(context);
             this._usersRepository = new UsersRepository(context);
+            this._participantsRepository = new ParticipantsRepository(context);
         }
 
         #region HttpGet (Select)
@@ -161,7 +163,8 @@ namespace ESChatServer.Areas.v1.Controllers
                 }
                 item.UTCCreationDate = DateTime.UtcNow;
 
-                this._roomsRepository.Add(item, true);
+                this._roomsRepository.Add(item, false);
+                this._participantsRepository.Add(new Participant() { IDRoom = item.ID, IDUser = item.IDOwner }, true);
 
                 return CreatedAtAction("Find", new { id = item.ID }, item);
             }
@@ -184,7 +187,8 @@ namespace ESChatServer.Areas.v1.Controllers
                 }
                 item.UTCCreationDate = DateTime.UtcNow;
 
-                await this._roomsRepository.AddAsync(item, true);
+                await this._roomsRepository.AddAsync(item, false);
+                await this._participantsRepository.AddAsync(new Participant() { IDRoom = item.ID, IDUser = item.IDOwner }, true);
 
                 return CreatedAtAction("FindAsync", new { id = item.ID }, item);
             }
