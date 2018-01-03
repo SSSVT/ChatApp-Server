@@ -24,10 +24,51 @@ namespace ESChatServer.Areas.v1.Controllers
 
         #region HttpGet (Select)
         [HttpGet]
+        public IActionResult GetByUserID([FromRoute] long id)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                return Ok(this._friendshipsRepository.FindByUserID(id));
+            }
+            catch (Exception ex)
+            {
+                //TODO: SaveException
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+        public async Task<IActionResult> GetByUserIDAsync([FromRoute] long id)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                return Ok(await this._friendshipsRepository.FindByUserIDAsync(id));
+            }
+            catch (Exception ex)
+            {
+                //TODO: SaveException
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet]
         public IActionResult GetAcceptedByUserID([FromRoute] long id)
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
                 return Ok(this._friendshipsRepository.FindAcceptedByUserID(id));
             }
             catch (Exception ex)
@@ -41,6 +82,11 @@ namespace ESChatServer.Areas.v1.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
                 return Ok(await this._friendshipsRepository.FindAcceptedByUserIDAsync(id));
             }
             catch (Exception ex)
@@ -55,6 +101,11 @@ namespace ESChatServer.Areas.v1.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
                 return Ok(this._friendshipsRepository.FindReceivedAndPendingByUserID(id));
             }
             catch (Exception ex)
@@ -68,6 +119,11 @@ namespace ESChatServer.Areas.v1.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
                 return Ok(await this._friendshipsRepository.FindReceivedAndPendingByUserIDAsync(id));
             }
             catch (Exception ex)

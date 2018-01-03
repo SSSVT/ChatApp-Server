@@ -118,5 +118,14 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
         {
             return await this._DatabaseContext.Friendships.Where(x => (x.IDSender == id || x.IDRecipient == id) && x.UTCAccepted != null).ToListAsync();
         }
+
+        public ICollection<Friendship> FindByUserID(long id)
+        {
+            return this._DatabaseContext.Friendships.Where(x => x.IDSender == id || x.IDRecipient == id).ToList();
+        }
+        public async Task<ICollection<Friendship>> FindByUserIDAsync(long id)
+        {
+            return await this._DatabaseContext.Friendships.Where(x => x.IDSender == id || x.IDRecipient == id).ToListAsync();
+        }
     }
 }
