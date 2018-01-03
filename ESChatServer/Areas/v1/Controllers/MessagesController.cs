@@ -24,8 +24,8 @@ namespace ESChatServer.Areas.v1.Controllers
             this._messagesRepository = new MessagesRepository(context);
         }
 
-        #region HttpGet (Select)
-        //TODO: Is these methods userful?
+        #region HttpGet/HttpPost (Select)
+        //TODO: Are these methods useful?
         [HttpGet]
         public IActionResult GetByUserID([FromRoute] long id)
         {
@@ -75,8 +75,9 @@ namespace ESChatServer.Areas.v1.Controllers
             }
         }
 
-        [HttpGet]
-        public IActionResult GetByRoomID([FromRoute] long id, [FromRoute] DateTime lastMessageTime)
+        //TODO: FIX
+        [HttpPost]
+        public IActionResult GetByRoomID([FromRoute] long id, [FromBody] DateTime lastMessageTime)
         {
             try
             {
@@ -99,8 +100,8 @@ namespace ESChatServer.Areas.v1.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
-        [HttpGet]
-        public async Task<IActionResult> GetByRoomIDAsync([FromRoute] long id, [FromRoute] DateTime lastMessageTime)
+        [HttpPost]
+        public async Task<IActionResult> GetByRoomIDAsync([FromRoute] long id, [FromBody] DateTime lastMessageTime)
         {
             try
             {
