@@ -14,5 +14,8 @@ namespace ESChatServer.Areas.v1.Models.Database.Interfaces
 
         ICollection<Friendship> FindReceivedAndPendingByUserID(long id);
         Task<ICollection<Friendship>> FindReceivedAndPendingByUserIDAsync(long id);
+
+        bool IsFriend(long currentUserID, long otherUserID);
+        Task<bool> IsFriendAsync(long currentUserID, long otherUserID);
     }
 }

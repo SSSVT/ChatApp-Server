@@ -1,4 +1,5 @@
-﻿using ESChatServer.Areas.v1.Models.Database;
+﻿using ESChatServer.Areas.v1.Models.Application.Objects;
+using ESChatServer.Areas.v1.Models.Database;
 using ESChatServer.Areas.v1.Models.Database.Entities;
 using ESChatServer.Areas.v1.Models.Database.Interfaces;
 using ESChatServer.Areas.v1.Models.Database.Repositories;
@@ -15,11 +16,13 @@ namespace ESChatServer.Areas.v1.Controllers
     {
         #region Fields
         private readonly IFriendshipsRepository _friendshipsRepository;
+        private readonly IUsersRepository _usersRepository;
         #endregion
 
         public FriendshipsController(DatabaseContext context)
         {
             this._friendshipsRepository = new FriendshipsRepository(context);
+            this._usersRepository = new UsersRepository(context);
         }
 
         #region HttpGet (Select)
@@ -181,7 +184,50 @@ namespace ESChatServer.Areas.v1.Controllers
             {
                 //TODO: SaveException
                 return StatusCode(StatusCodes.Status500InternalServerError);
-            }            
+            }
+        }
+
+        [HttpGet]
+        public IActionResult IsUserFriend([FromRoute] long id)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                string username = UserObtainer.GetCurrentUserUsername(this.User.Claims);
+                User currUser = this._usersRepository.FindByUsername(username);
+
+                return Ok(this._friendshipsRepository.IsFriend(currUser.ID, id));
+            }
+            catch (Exception ex)
+            {
+                //TODO: SaveException
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+        [HttpGet]
+        public async Task<IActionResult> IsUserFriendAsync([FromRoute] long id)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                string username = UserObtainer.GetCurrentUserUsername(this.User.Claims);
+                User currUser = await this._usersRepository.FindByUsernameAsync(username);
+
+                return Ok(await this._friendshipsRepository.IsFriendAsync(currUser.ID, id));
+            }
+            catch (Exception ex)
+            {
+                //TODO: SaveException
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
         #endregion
 
