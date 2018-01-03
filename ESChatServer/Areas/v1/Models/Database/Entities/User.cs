@@ -41,11 +41,19 @@ namespace ESChatServer.Areas.v1.Models.Database.Entities
         [RegularExpression("[ADIO]")] //Active, Do not disturb, Invisible, Offline
         public string Status { get; set; }
 
+        #region Virtual
+        [JsonIgnore]
         public ICollection<Login> Logins { get; set; }
+        [JsonIgnore]
         public ICollection<Room> OwnedRooms { get; set; }
+        [JsonIgnore]
         public ICollection<Participant> Participants { get; set; }
+        [JsonIgnore]
         public ICollection<Message> Messages { get; set; }
+        [JsonIgnore]
         public ICollection<Friendship> SentFriendships { get; set; }
+        [JsonIgnore]
         public ICollection<Friendship> ReceivedFriendships { get; set; }
+        #endregion
     }
 }

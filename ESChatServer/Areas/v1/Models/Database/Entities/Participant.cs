@@ -15,7 +15,11 @@ namespace ESChatServer.Areas.v1.Models.Database.Entities
         [Required]
         public long IDUser { get; set; }
 
+        #region Virtual
+        [JsonIgnore]
         public virtual Room Room { get; set; }
+        [JsonIgnore]
         public virtual User User { get; set; }
+        #endregion
     }
 }

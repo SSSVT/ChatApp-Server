@@ -21,7 +21,11 @@ namespace ESChatServer.Areas.v1.Models.Database.Entities
         [Required]
         public DateTime? UTCAccepted { get; set; }
 
+        #region Virtual
+        [JsonIgnore]
         public virtual User Sender { get; set; }
+        [JsonIgnore]
         public virtual User Recipient { get; set; }
+        #endregion
     }
 }

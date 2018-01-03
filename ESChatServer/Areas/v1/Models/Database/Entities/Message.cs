@@ -23,7 +23,11 @@ namespace ESChatServer.Areas.v1.Models.Database.Entities
         [Required]
         public string Content { get; set; }
 
+        #region Virtual
+        [JsonIgnore]
         public virtual Room Room { get; set; }
+        [JsonIgnore]
         public virtual User Owner { get; set; }
+        #endregion
     }
 }

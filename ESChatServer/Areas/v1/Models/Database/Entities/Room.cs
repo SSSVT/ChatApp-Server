@@ -22,8 +22,13 @@ namespace ESChatServer.Areas.v1.Models.Database.Entities
         [Required]
         public DateTime? UTCCreationDate { get; set; }
 
+        #region Virtual
+        [JsonIgnore]
         public virtual User Owner { get; set; }
+        [JsonIgnore]
         public virtual ICollection<Participant> Participants { get; set; }
+        [JsonIgnore]
         public virtual ICollection<Message> Messages { get; set; }
+        #endregion
     }
 }

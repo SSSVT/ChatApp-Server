@@ -23,6 +23,9 @@ namespace ESChatServer.Areas.v1.Models.Database.Entities
         [Required, MaxLength(15)]
         public string IPAddress { get; set; }
 
+        #region Virtual
+        [JsonIgnore]
         public virtual User User { get; set; }
+        #endregion
     }
 }
