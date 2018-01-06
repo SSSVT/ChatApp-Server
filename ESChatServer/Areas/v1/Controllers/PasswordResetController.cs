@@ -104,6 +104,11 @@ namespace ESChatServer.Areas.v1.Controllers
 
                     await this._usersRepository.UpdateAsync(user, true);
 
+                    reset.Used = true;
+                    reset.UtcExpiration = DateTime.UtcNow;
+
+                    await this._passwordResetRepository.UpdateAsync(reset, true);
+
                     return NoContent();
                 }
                 return Unauthorized();
