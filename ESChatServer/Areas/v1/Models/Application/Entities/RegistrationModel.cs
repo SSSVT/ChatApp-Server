@@ -24,7 +24,7 @@ namespace ESChatServer.Areas.v1.Models.Application.Entities
         [RegularExpression("[MF]")]
         public string Gender { get; set; }
 
-        [Required, MaxLength(512)]
+        [Required, MaxLength(256)]
         [EmailAddress]
         public string Email { get; set; }
     }

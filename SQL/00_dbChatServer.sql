@@ -19,7 +19,7 @@ CREATE TABLE [es_tbUsers](
 	LAST_NAME nvarchar(64) not null,
 	BIRTHDAY date not null,
 	GENDER char(1) not null,
-	EMAIL nvarchar(512) not null,
+	EMAIL nvarchar(256) not null,
 
 	USERNAME nvarchar(64) not null,
 	PSWD_HASH nvarchar(2048) not null,
