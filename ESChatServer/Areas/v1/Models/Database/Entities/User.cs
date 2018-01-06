@@ -43,17 +43,20 @@ namespace ESChatServer.Areas.v1.Models.Database.Entities
 
         #region Virtual
         //[JsonIgnore]
-        //public ICollection<Login> Logins { get; set; }
+        //public virtual ICollection<Login> Logins { get; set; }
         [JsonIgnore]
-        public ICollection<Room> OwnedRooms { get; set; }
+        public virtual ICollection<Room> OwnedRooms { get; set; }
         [JsonIgnore]
-        public ICollection<Participant> Participants { get; set; }
+        public virtual ICollection<Participant> Participants { get; set; }
         [JsonIgnore]
-        public ICollection<Message> Messages { get; set; }
+        public virtual ICollection<Message> Messages { get; set; }
         [JsonIgnore]
-        public ICollection<Friendship> SentFriendships { get; set; }
+        public virtual ICollection<Friendship> SentFriendships { get; set; }
         [JsonIgnore]
-        public ICollection<Friendship> ReceivedFriendships { get; set; }
+        public virtual ICollection<Friendship> ReceivedFriendships { get; set; }
+
+        [JsonIgnore]
+        public virtual ICollection<PasswordReset> PasswordResets { get; set; }
         #endregion
     }
 }

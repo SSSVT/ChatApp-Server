@@ -97,6 +97,17 @@ ALTER TABLE [es_tbFriendships] ADD CONSTRAINT DF_es_tbFriendships_ID DEFAULT (NE
 ALTER TABLE [es_tbFriendships] ADD CONSTRAINT CK_es_tbFriendships_REQUEST_SERVER_RECEIVED_UTC CHECK (REQUEST_SERVER_RECEIVED_UTC <= GETUTCDATE());
 ALTER TABLE [es_tbFriendships] ADD CONSTRAINT CK_es_tbFriendships_REQUEST_ACCEPTED_UTC CHECK (REQUEST_SERVER_RECEIVED_UTC < REQUEST_ACCEPTED_UTC AND REQUEST_ACCEPTED_UTC <= GETUTCDATE());
 
+CREATE TABLE [es_tbPasswordResets](
+	ID uniqueidentifier not null,
+	IDes_tbUsers bigint not null,
+	ISSUED_UTC datetime not null,
+	EXPIRE_UTC datetime not null,
+	USED bit not null
+);
+ALTER TABLE [es_tbPasswordResets] ADD CONSTRAINT PK_es_tbPasswordResets_ID PRIMARY KEY NONCLUSTERED (ID);
+ALTER TABLE [es_tbPasswordResets] ADD CONSTRAINT CK_es_tbPasswordResets_ISSUED_UTC CHECK (ISSUED_UTC <= GETUTCDATE());
+ALTER TABLE [es_tbPasswordResets] ADD CONSTRAINT CK_es_tbPasswordResets_EXPIRE_UTC CHECK (ISSUED_UTC < EXPIRE_UTC)
+
 /* FOREIGN KEYS */
 --ALTER TABLE [es_tbLogins] ADD CONSTRAINT FK_es_tbLogins_IDes_tbUsers FOREIGN KEY (IDes_tbUsers) REFERENCES es_tbUsers(ID);
 ALTER TABLE [es_tbRooms] ADD CONSTRAINT FK_es_tbRooms_IDes_tbUsers FOREIGN KEY (IDes_tbUsers) REFERENCES es_tbUsers(ID);
@@ -106,3 +117,4 @@ ALTER TABLE [es_tbMessages] ADD CONSTRAINT FK_es_tbMessages_IDes_tbRooms FOREIGN
 ALTER TABLE [es_tbMessages] ADD CONSTRAINT FK_es_tbMessages_IDes_tbUsers FOREIGN KEY (IDes_tbUsers) REFERENCES es_tbUsers(ID);
 ALTER TABLE [es_tbFriendships] ADD CONSTRAINT FK_es_tbFriendships_IDes_tbUsers_SENDER FOREIGN KEY (IDes_tbUsers_SENDER) REFERENCES es_tbUsers(ID);
 ALTER TABLE [es_tbFriendships] ADD CONSTRAINT FK_es_tbFriendships_IDes_tbUsers_RECIPIENT FOREIGN KEY (IDes_tbUsers_RECIPIENT) REFERENCES es_tbUsers(ID);
+ALTER TABLE [es_tbPasswordResets] ADD CONSTRAINT FK_es_tbPasswordResets_IDes_tbUsers FOREIGN KEY (IDes_tbUsers) REFERENCES es_tbUsers(ID);

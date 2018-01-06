@@ -16,6 +16,7 @@ namespace ESChatServer.Areas.v1.Models.Database
         //public DbSet<Login> Logins { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<Participant> Participants { get; set; }
+        public DbSet<PasswordReset> PasswordResets { get; set; }
         public DbSet<Room> Rooms { get; set; }
         public DbSet<User> Users { get; set; }
         #endregion
@@ -26,6 +27,7 @@ namespace ESChatServer.Areas.v1.Models.Database
             //modelBuilder.Entity<Login>().ToTable("es_tbLogins");
             modelBuilder.Entity<Message>().ToTable("es_tbMessages");
             modelBuilder.Entity<Participant>().ToTable("es_tbRoomParticipants");
+            modelBuilder.Entity<PasswordReset>().ToTable("es_tbPasswordResets");
             modelBuilder.Entity<Room>().ToTable("es_tbRooms");
             modelBuilder.Entity<User>().ToTable("es_tbUsers");
 
@@ -177,6 +179,44 @@ namespace ESChatServer.Areas.v1.Models.Database
                 .WithMany(u => u.Participants)
                 .HasForeignKey(p => p.IDUser)
                 .HasConstraintName("FK_es_tbRoomParticipants_IDes_tbUsers");
+            #endregion
+            #region PasswordReset
+            modelBuilder.Entity<PasswordReset>()
+                .Property(x => x.Id)
+                .HasColumnName("ID");
+            modelBuilder.Entity<PasswordReset>()
+                .HasKey(x => x.Id);
+            modelBuilder.Entity<PasswordReset>()
+                .Property(x => x.Id)
+                .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<PasswordReset>()
+                .Property(x => x.UserId)
+                .HasColumnName("IDes_tbUsers");
+
+            modelBuilder.Entity<PasswordReset>()
+                .Property(x => x.UtcIssued)
+                .HasColumnName("ISSUED_UTC");
+            modelBuilder.Entity<PasswordReset>()
+                .Property(x => x.UtcIssued)
+                .HasDefaultValue(DateTime.UtcNow);
+
+            modelBuilder.Entity<PasswordReset>()
+                .Property(x => x.UtcExpiration)
+                .HasColumnName("EXPIRE_UTC");
+            modelBuilder.Entity<PasswordReset>()
+                .Property(x => x.UtcExpiration)
+                .HasDefaultValue(DateTime.UtcNow.AddMinutes(10));
+
+            modelBuilder.Entity<PasswordReset>()
+                .Property(x => x.Used)
+                .HasColumnName("USED");
+
+            modelBuilder.Entity<PasswordReset>()
+                .HasOne(r => r.User)
+                .WithMany(u => u.PasswordResets)
+                .HasForeignKey(r => r.UserId)
+                .HasConstraintName("FK_es_tbPasswordResets_IDes_tbUsers");
             #endregion
             #region Room
             modelBuilder.Entity<Room>()
