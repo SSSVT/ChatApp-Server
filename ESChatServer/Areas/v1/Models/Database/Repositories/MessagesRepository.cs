@@ -14,14 +14,14 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
         {
         }
 
-        public override void Add(Message item, bool saveChanges)
+        public void Add(Message item, bool saveChanges)
         {
             this._DatabaseContext.Messages.Add(item);
 
             if (saveChanges)
                 this.SaveChanges();
         }
-        public override async Task AddAsync(Message item, bool saveChanges)
+        public async Task AddAsync(Message item, bool saveChanges)
         {
             await this._DatabaseContext.Messages.AddAsync(item);
 
@@ -29,32 +29,32 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
                 await this.SaveChangesAsync();
         }
 
-        public override Message Find(object id)
+        public Message Find(object id)
         {
             return this._DatabaseContext.Messages.Find(id);
         }
-        public override async Task<Message> FindAsync(object id)
+        public async Task<Message> FindAsync(object id)
         {
             return await this._DatabaseContext.Messages.FindAsync(id);
         }
 
-        public override ICollection<Message> FindAll()
+        public ICollection<Message> FindAll()
         {
             return this._DatabaseContext.Messages.ToList();
         }
-        public override async Task<List<Message>> FindAllAsync()
+        public async Task<List<Message>> FindAllAsync()
         {
             return await this._DatabaseContext.Messages.ToListAsync();
         }
 
-        public override void Remove(Message item, bool saveChanges)
+        public void Remove(Message item, bool saveChanges)
         {
             this._DatabaseContext.Messages.Remove(item);
 
             if (saveChanges)
                 this.SaveChanges();
         }
-        public override async Task RemoveAsync(Message item, bool saveChanges)
+        public async Task RemoveAsync(Message item, bool saveChanges)
         {
             this._DatabaseContext.Messages.Remove(item);
 
@@ -62,7 +62,7 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
                 await this.SaveChangesAsync();
         }
 
-        public override void Update(Message item, bool saveChanges)
+        public void Update(Message item, bool saveChanges)
         {
             Message message = this.Find(item.ID);
             message.IDRoom = item.IDRoom;
@@ -77,7 +77,7 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
             if (saveChanges)
                 this.SaveChanges();
         }
-        public override async Task UpdateAsync(Message item, bool saveChanges)
+        public async Task UpdateAsync(Message item, bool saveChanges)
         {
             Message message = await this.FindAsync(item.ID);
             message.IDRoom = item.IDRoom;
@@ -111,11 +111,11 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
             return await this._DatabaseContext.Messages.Where(x => x.IDRoom == id && x.UTCServerReceived > time).ToListAsync();
         }
 
-        public override bool Exists(object id)
+        public bool Exists(object id)
         {
             return this.Find(id) != null;
         }
-        public override async Task<bool> ExistsAsync(object id)
+        public async Task<bool> ExistsAsync(object id)
         {
             return await this.FindAsync(id) != null;
         }

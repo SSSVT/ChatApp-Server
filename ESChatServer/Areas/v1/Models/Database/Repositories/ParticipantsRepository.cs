@@ -13,14 +13,14 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
         {
         }
 
-        public override void Add(Participant item, bool saveChanges)
+        public void Add(Participant item, bool saveChanges)
         {
             this._DatabaseContext.Participants.Add(item);
 
             if (saveChanges)
                 this.SaveChanges();
         }
-        public override async Task AddAsync(Participant item, bool saveChanges)
+        public async Task AddAsync(Participant item, bool saveChanges)
         {
             await this._DatabaseContext.Participants.AddAsync(item);
 
@@ -28,32 +28,32 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
                 await this.SaveChangesAsync();
         }
 
-        public override Participant Find(object id)
+        public Participant Find(object id)
         {
             return this._DatabaseContext.Participants.Find(id);
         }
-        public override async Task<Participant> FindAsync(object id)
+        public async Task<Participant> FindAsync(object id)
         {
             return await this._DatabaseContext.Participants.FindAsync(id);
         }
 
-        public override ICollection<Participant> FindAll()
+        public ICollection<Participant> FindAll()
         {
             return this._DatabaseContext.Participants.ToList();
         }
-        public override async Task<List<Participant>> FindAllAsync()
+        public async Task<List<Participant>> FindAllAsync()
         {
             return await this._DatabaseContext.Participants.ToListAsync();
         }
 
-        public override void Remove(Participant item, bool saveChanges)
+        public void Remove(Participant item, bool saveChanges)
         {
             this._DatabaseContext.Participants.Remove(item);
 
             if (saveChanges)
                 this.SaveChanges();
         }
-        public override async Task RemoveAsync(Participant item, bool saveChanges)
+        public async Task RemoveAsync(Participant item, bool saveChanges)
         {
             this._DatabaseContext.Participants.Remove(item);
 
@@ -61,7 +61,7 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
                 await this.SaveChangesAsync();
         }
 
-        public override void Update(Participant item, bool saveChanges)
+        public void Update(Participant item, bool saveChanges)
         {
             Participant participant = this.Find(item.ID);
             participant.IDRoom = item.IDRoom;
@@ -74,7 +74,7 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
             if (saveChanges)
                 this.SaveChanges();
         }
-        public override async Task UpdateAsync(Participant item, bool saveChanges)
+        public async Task UpdateAsync(Participant item, bool saveChanges)
         {
             Participant participant = await this.FindAsync(item.ID);
             participant.IDRoom = item.IDRoom;
@@ -106,11 +106,11 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
             return await this._DatabaseContext.Participants.Where(x => x.IDRoom == id).ToListAsync();
         }
 
-        public override bool Exists(object id)
+        public bool Exists(object id)
         {
             return this.Find(id) != null;
         }
-        public override async Task<bool> ExistsAsync(object id)
+        public async Task<bool> ExistsAsync(object id)
         {
             return await this.FindAsync(id) != null;
         }

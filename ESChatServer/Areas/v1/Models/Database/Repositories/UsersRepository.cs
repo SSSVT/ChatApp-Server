@@ -13,14 +13,14 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
         {
         }
 
-        public override void Add(User item, bool saveChanges)
+        public void Add(User item, bool saveChanges)
         {
             this._DatabaseContext.Users.Add(item);
 
             if (saveChanges)
                 this.SaveChanges();
         }
-        public override async Task AddAsync(User item, bool saveChanges)
+        public async Task AddAsync(User item, bool saveChanges)
         {
             await this._DatabaseContext.Users.AddAsync(item);
 
@@ -28,32 +28,32 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
                 await this.SaveChangesAsync();
         }
 
-        public override User Find(object id)
+        public User Find(object id)
         {
             return this._DatabaseContext.Users.Find(id);
         }
-        public override async Task<User> FindAsync(object id)
+        public async Task<User> FindAsync(object id)
         {
             return await this._DatabaseContext.Users.FindAsync(id);
         }
 
-        public override ICollection<User> FindAll()
+        public ICollection<User> FindAll()
         {
             return this._DatabaseContext.Users.ToList();
         }
-        public override async Task<List<User>> FindAllAsync()
+        public async Task<List<User>> FindAllAsync()
         {
             return await this._DatabaseContext.Users.ToListAsync();
         }
 
-        public override void Remove(User item, bool saveChanges)
+        public void Remove(User item, bool saveChanges)
         {
             this._DatabaseContext.Users.Remove(item);
 
             if (saveChanges)
                 this.SaveChanges();
         }
-        public override async Task RemoveAsync(User item, bool saveChanges)
+        public async Task RemoveAsync(User item, bool saveChanges)
         {
             this._DatabaseContext.Users.Remove(item);
 
@@ -61,7 +61,7 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
                 await this.SaveChangesAsync();
         }
 
-        public override void Update(User item, bool saveChanges)
+        public void Update(User item, bool saveChanges)
         {
             User user = this.Find(item.ID);
             user.FirstName = item.FirstName;
@@ -86,7 +86,7 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
             if (saveChanges)
                 this.SaveChanges();
         }
-        public override async Task UpdateAsync(User item, bool saveChanges)
+        public async Task UpdateAsync(User item, bool saveChanges)
         {
             User user = await this.FindAsync(item.ID);
             user.FirstName = item.FirstName;
@@ -121,11 +121,11 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
             return await this._DatabaseContext.Users.Where(x => x.Username == username).FirstOrDefaultAsync();
         }
 
-        public override bool Exists(object id)
+        public bool Exists(object id)
         {
             return this.Find(id) != null;
         }
-        public override async Task<bool> ExistsAsync(object id)
+        public async Task<bool> ExistsAsync(object id)
         {
             return await this.FindAsync(id) != null;
         }

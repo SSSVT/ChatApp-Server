@@ -13,14 +13,14 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
         {
         }
 
-        public override void Add(Friendship item, bool saveChanges)
+        public void Add(Friendship item, bool saveChanges)
         {
             this._DatabaseContext.Friendships.Add(item);
 
             if (saveChanges)
                 this.SaveChanges();
         }
-        public override async Task AddAsync(Friendship item, bool saveChanges)
+        public async Task AddAsync(Friendship item, bool saveChanges)
         {
             await this._DatabaseContext.Friendships.AddAsync(item);
 
@@ -28,32 +28,32 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
                 await this.SaveChangesAsync();
         }
 
-        public override Friendship Find(object id)
+        public Friendship Find(object id)
         {
             return this._DatabaseContext.Friendships.Find(id);
         }
-        public override async Task<Friendship> FindAsync(object id)
+        public async Task<Friendship> FindAsync(object id)
         {
             return await this._DatabaseContext.Friendships.FindAsync(id);
         }
 
-        public override ICollection<Friendship> FindAll()
+        public ICollection<Friendship> FindAll()
         {
             return this._DatabaseContext.Friendships.ToList();
         }
-        public override async Task<List<Friendship>> FindAllAsync()
+        public async Task<List<Friendship>> FindAllAsync()
         {
             return await this._DatabaseContext.Friendships.ToListAsync();
         }
 
-        public override void Remove(Friendship item, bool saveChanges)
+        public void Remove(Friendship item, bool saveChanges)
         {
             this._DatabaseContext.Friendships.Remove(item);
 
             if (saveChanges)
                 this.SaveChanges();
         }
-        public override async Task RemoveAsync(Friendship item, bool saveChanges)
+        public async Task RemoveAsync(Friendship item, bool saveChanges)
         {
             this._DatabaseContext.Friendships.Remove(item);
 
@@ -61,7 +61,7 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
                 await this.SaveChangesAsync();
         }
 
-        public override void Update(Friendship item, bool saveChanges)
+        public void Update(Friendship item, bool saveChanges)
         {
             Friendship friendship = this.Find(item.ID);
             friendship.IDSender = item.IDSender;
@@ -76,7 +76,7 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
             if (saveChanges)
                 this.SaveChanges();
         }
-        public override async Task UpdateAsync(Friendship item, bool saveChanges)
+        public async Task UpdateAsync(Friendship item, bool saveChanges)
         {
             Friendship friendship = await this.FindAsync(item.ID);
             friendship.IDSender = item.IDSender;
@@ -92,11 +92,11 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
                 await this.SaveChangesAsync();
         }
 
-        public override bool Exists(object id)
+        public bool Exists(object id)
         {
             return this.Find(id) != null;
         }
-        public override async Task<bool> ExistsAsync(object id)
+        public async Task<bool> ExistsAsync(object id)
         {
             return await this.FindAsync(id) != null;
         }

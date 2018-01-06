@@ -13,14 +13,14 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
         {
         }
 
-        public override void Add(Room item, bool saveChanges)
+        public void Add(Room item, bool saveChanges)
         {
             this._DatabaseContext.Rooms.Add(item);
 
             if (saveChanges)
                 this.SaveChanges();
         }
-        public override async Task AddAsync(Room item, bool saveChanges)
+        public async Task AddAsync(Room item, bool saveChanges)
         {
             await this._DatabaseContext.Rooms.AddAsync(item);
 
@@ -28,25 +28,25 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
                 await this.SaveChangesAsync();
         }
 
-        public override Room Find(object id)
+        public Room Find(object id)
         {
             return this._DatabaseContext.Rooms.Find(id);
         }
-        public override async Task<Room> FindAsync(object id)
+        public async Task<Room> FindAsync(object id)
         {
             return await this._DatabaseContext.Rooms.FindAsync(id);
         }
 
-        public override ICollection<Room> FindAll()
+        public ICollection<Room> FindAll()
         {
             return this._DatabaseContext.Rooms.ToList();
         }
-        public override async Task<List<Room>> FindAllAsync()
+        public async Task<List<Room>> FindAllAsync()
         {
             return await this._DatabaseContext.Rooms.ToListAsync();
         }
 
-        public override void Remove(Room item, bool saveChanges)
+        public void Remove(Room item, bool saveChanges)
         {
             IParticipantsRepository participantsRepository = new ParticipantsRepository(this._DatabaseContext);
 
@@ -61,7 +61,7 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
             if (saveChanges)
                 this.SaveChanges();
         }
-        public override async Task RemoveAsync(Room item, bool saveChanges)
+        public async Task RemoveAsync(Room item, bool saveChanges)
         {
             IParticipantsRepository participantsRepository = new ParticipantsRepository(this._DatabaseContext);
 
@@ -77,7 +77,7 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
                 await this.SaveChangesAsync();
         }
 
-        public override void Update(Room item, bool saveChanges)
+        public void Update(Room item, bool saveChanges)
         {
             Room room = this.Find(item.ID);
             room.IDOwner = item.IDOwner;
@@ -92,7 +92,7 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
             if (saveChanges)
                 this.SaveChanges();
         }
-        public override async Task UpdateAsync(Room item, bool saveChanges)
+        public async Task UpdateAsync(Room item, bool saveChanges)
         {
             Room room = await this.FindAsync(item.ID);
             room.IDOwner = item.IDOwner;
@@ -108,7 +108,7 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
                 await this.SaveChangesAsync();
         }
 
-        public virtual ICollection<Room> FindByUserID(long id)
+        public ICollection<Room> FindByUserID(long id)
         {
             ICollection<Room> result = (from p in this._DatabaseContext.Participants
                           join r in this._DatabaseContext.Rooms on p.IDRoom equals r.ID
@@ -118,7 +118,7 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
                           ).ToList();
             return result;
         }
-        public virtual async Task<ICollection<Room>> FindByUserIDAsync(long id)
+        public async Task<ICollection<Room>> FindByUserIDAsync(long id)
         {
             ICollection<Room> result = await (from p in this._DatabaseContext.Participants
                                         join r in this._DatabaseContext.Rooms on p.IDRoom equals r.ID
@@ -129,11 +129,11 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
             return result;
         }
 
-        public override bool Exists(object id)
+        public bool Exists(object id)
         {
             return this.Find(id) != null;
         }
-        public override async Task<bool> ExistsAsync(object id)
+        public async Task<bool> ExistsAsync(object id)
         {
             return await this.FindAsync(id) != null;
         }
