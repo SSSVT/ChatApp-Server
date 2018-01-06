@@ -124,6 +124,43 @@ namespace ESChatServer.Areas.v1.Controllers
         }
 
         [HttpGet]
+        public IActionResult SearchForUsersByUsername([FromRoute] string id)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                return Ok(this._usersRepository.FindByUsernameIncomplete(id));
+            }
+            catch (Exception ex)
+            {
+                //TODO: SaveException
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+        [HttpGet]
+        public async Task<IActionResult> SearchForUsersByUsernameAsync([FromRoute] string id)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                return Ok(await this._usersRepository.FindByUsernameIncompleteAsync(id));
+            }
+            catch (Exception ex)
+            {
+                //TODO: SaveException
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet]
         public IActionResult FindByUsername(string id)
         {
             try

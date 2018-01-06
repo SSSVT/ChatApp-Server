@@ -129,5 +129,14 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
         {
             return await this.FindAsync(id) != null;
         }
+
+        public ICollection<User> FindByUsernameIncomplete(string username)
+        {
+            return this._DatabaseContext.Users.Where(x => x.Username.Contains(username)).ToList();
+        }
+        public async Task<ICollection<User>> FindByUsernameIncompleteAsync(string username)
+        {
+            return await this._DatabaseContext.Users.Where(x => x.Username.Contains(username)).ToListAsync();
+        }
     }
 }
