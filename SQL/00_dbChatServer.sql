@@ -37,22 +37,22 @@ ALTER TABLE [es_tbUsers] ADD CONSTRAINT DF_es_tbUsers_REGISTERED_ON_UTC DEFAULT 
 ALTER TABLE [es_tbUsers] ADD CONSTRAINT CK_es_tbUsers_REGISTERED_ON_UTC CHECK (REGISTERED_ON_UTC <= GETUTCDATE());
 ALTER TABLE [es_tbUsers] ADD CONSTRAINT CK_es_tbUsers_USER_STATUS CHECK (USER_STATUS IN ('A', 'D', 'I', 'O'))
 
-CREATE TABLE [es_tbLogins](
-	ID uniqueidentifier not null,
-	IDes_tbUsers bigint not null,
+--CREATE TABLE [es_tbLogins](
+--	ID uniqueidentifier not null,
+--	IDes_tbUsers bigint not null,
 
-	LOGIN_TIME_UTC datetime not null,
-	LOGOUT_TIME_UTC datetime,
+--	LOGIN_TIME_UTC datetime not null,
+--	LOGOUT_TIME_UTC datetime,
 
-	USER_AGENT nvarchar(256) not null,
-	USER_IP nvarchar(15) not null
-);
-ALTER TABLE [es_tbLogins] ADD CONSTRAINT PK_es_tbLogins_ID PRIMARY KEY NONCLUSTERED (ID);
-ALTER TABLE [es_tbLogins] ADD CONSTRAINT DF_es_tbLogins_ID DEFAULT (NEWID()) FOR ID;
-CREATE INDEX IX_es_tbLogins_IDes_tbUsers ON [es_tbLogins](ID);
-ALTER TABLE [es_tbLogins] ADD CONSTRAINT DF_es_tbLogins_LOGIN_TIME_UTC DEFAULT (GETUTCDATE()) FOR LOGIN_TIME_UTC;
-ALTER TABLE [es_tbLogins] ADD CONSTRAINT CK_es_tbLogins_LOGIN_TIME_UTC CHECK (LOGIN_TIME_UTC <= GETUTCDATE());
-ALTER TABLE [es_tbLogins] ADD CONSTRAINT CK_es_tbLogins_LOGOUT_TIME_UTC CHECK (LOGIN_TIME_UTC < LOGOUT_TIME_UTC);
+--	USER_AGENT nvarchar(256) not null,
+--	USER_IP nvarchar(15) not null
+--);
+--ALTER TABLE [es_tbLogins] ADD CONSTRAINT PK_es_tbLogins_ID PRIMARY KEY NONCLUSTERED (ID);
+--ALTER TABLE [es_tbLogins] ADD CONSTRAINT DF_es_tbLogins_ID DEFAULT (NEWID()) FOR ID;
+--CREATE INDEX IX_es_tbLogins_IDes_tbUsers ON [es_tbLogins](ID);
+--ALTER TABLE [es_tbLogins] ADD CONSTRAINT DF_es_tbLogins_LOGIN_TIME_UTC DEFAULT (GETUTCDATE()) FOR LOGIN_TIME_UTC;
+--ALTER TABLE [es_tbLogins] ADD CONSTRAINT CK_es_tbLogins_LOGIN_TIME_UTC CHECK (LOGIN_TIME_UTC <= GETUTCDATE());
+--ALTER TABLE [es_tbLogins] ADD CONSTRAINT CK_es_tbLogins_LOGOUT_TIME_UTC CHECK (LOGIN_TIME_UTC < LOGOUT_TIME_UTC);
 
 CREATE TABLE [es_tbRooms](
 	ID bigint identity(1,1) not null,
@@ -98,7 +98,7 @@ ALTER TABLE [es_tbFriendships] ADD CONSTRAINT CK_es_tbFriendships_REQUEST_SERVER
 ALTER TABLE [es_tbFriendships] ADD CONSTRAINT CK_es_tbFriendships_REQUEST_ACCEPTED_UTC CHECK (REQUEST_SERVER_RECEIVED_UTC < REQUEST_ACCEPTED_UTC AND REQUEST_ACCEPTED_UTC <= GETUTCDATE());
 
 /* FOREIGN KEYS */
-ALTER TABLE [es_tbLogins] ADD CONSTRAINT FK_es_tbLogins_IDes_tbUsers FOREIGN KEY (IDes_tbUsers) REFERENCES es_tbUsers(ID);
+--ALTER TABLE [es_tbLogins] ADD CONSTRAINT FK_es_tbLogins_IDes_tbUsers FOREIGN KEY (IDes_tbUsers) REFERENCES es_tbUsers(ID);
 ALTER TABLE [es_tbRooms] ADD CONSTRAINT FK_es_tbRooms_IDes_tbUsers FOREIGN KEY (IDes_tbUsers) REFERENCES es_tbUsers(ID);
 ALTER TABLE [es_tbRoomParticipants] ADD CONSTRAINT FK_es_tbRoomParticipants_IDes_tbRooms FOREIGN KEY (IDes_tbRooms) REFERENCES es_tbRooms(ID);
 ALTER TABLE [es_tbRoomParticipants] ADD CONSTRAINT FK_es_tbRoomParticipants_IDes_tbUsers FOREIGN KEY (IDes_tbUsers) REFERENCES es_tbUsers(ID);

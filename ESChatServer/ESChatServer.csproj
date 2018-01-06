@@ -6,10 +6,22 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\v1\Data\" />
-    <Folder Include="Areas\v1\Views\" />
-    <Folder Include="Controllers\" />
-    <Folder Include="wwwroot\" />
+    <Compile Remove="Areas\v1\Data\**" />
+    <Compile Remove="Areas\v1\Views\**" />
+    <Compile Remove="Controllers\**" />
+    <Compile Remove="wwwroot\**" />
+    <Content Remove="Areas\v1\Data\**" />
+    <Content Remove="Areas\v1\Views\**" />
+    <Content Remove="Controllers\**" />
+    <Content Remove="wwwroot\**" />
+    <EmbeddedResource Remove="Areas\v1\Data\**" />
+    <EmbeddedResource Remove="Areas\v1\Views\**" />
+    <EmbeddedResource Remove="Controllers\**" />
+    <EmbeddedResource Remove="wwwroot\**" />
+    <None Remove="Areas\v1\Data\**" />
+    <None Remove="Areas\v1\Views\**" />
+    <None Remove="Controllers\**" />
+    <None Remove="wwwroot\**" />
   </ItemGroup>
 
   <ItemGroup>

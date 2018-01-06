@@ -13,7 +13,7 @@ namespace ESChatServer.Areas.v1.Models.Database
 
         #region DbSets
         public DbSet<Friendship> Friendships { get; set; }
-        public DbSet<Login> Logins { get; set; }
+        //public DbSet<Login> Logins { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<Participant> Participants { get; set; }
         public DbSet<Room> Rooms { get; set; }
@@ -23,7 +23,7 @@ namespace ESChatServer.Areas.v1.Models.Database
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Friendship>().ToTable("es_tbFriendships");
-            modelBuilder.Entity<Login>().ToTable("es_tbLogins");
+            //modelBuilder.Entity<Login>().ToTable("es_tbLogins");
             modelBuilder.Entity<Message>().ToTable("es_tbMessages");
             modelBuilder.Entity<Participant>().ToTable("es_tbRoomParticipants");
             modelBuilder.Entity<Room>().ToTable("es_tbRooms");
@@ -68,43 +68,43 @@ namespace ESChatServer.Areas.v1.Models.Database
                 .HasConstraintName("FK_es_tbFriendships_IDes_tbUsers_RECIPIENT");
             #endregion
             #region Login
-            modelBuilder.Entity<Login>()
-                .Property(x => x.ID)
-                .HasColumnName("ID");
-            modelBuilder.Entity<Login>()
-                .HasKey(x => x.ID);
-            modelBuilder.Entity<Login>()
-                .Property(x => x.ID)
-                .ValueGeneratedOnAdd();
+            //modelBuilder.Entity<Login>()
+            //    .Property(x => x.ID)
+            //    .HasColumnName("ID");
+            //modelBuilder.Entity<Login>()
+            //    .HasKey(x => x.ID);
+            //modelBuilder.Entity<Login>()
+            //    .Property(x => x.ID)
+            //    .ValueGeneratedOnAdd();
 
-            modelBuilder.Entity<Login>()
-                .Property(x => x.IDUser)
-                .HasColumnName("IDes_tbUsers");
+            //modelBuilder.Entity<Login>()
+            //    .Property(x => x.IDUser)
+            //    .HasColumnName("IDes_tbUsers");
 
-            modelBuilder.Entity<Login>()
-                .Property(x => x.UTCLoginTime)
-                .HasColumnName("LOGIN_TIME_UTC");
-            modelBuilder.Entity<Login>()
-                .Property(x => x.UTCLoginTime)
-                .HasDefaultValue(DateTime.UtcNow);
+            //modelBuilder.Entity<Login>()
+            //    .Property(x => x.UTCLoginTime)
+            //    .HasColumnName("LOGIN_TIME_UTC");
+            //modelBuilder.Entity<Login>()
+            //    .Property(x => x.UTCLoginTime)
+            //    .HasDefaultValue(DateTime.UtcNow);
 
-            modelBuilder.Entity<Login>()
-                .Property(x => x.UTCLogoutTime)
-                .HasColumnName("LOGOUT_TIME_UTC");
+            //modelBuilder.Entity<Login>()
+            //    .Property(x => x.UTCLogoutTime)
+            //    .HasColumnName("LOGOUT_TIME_UTC");
 
-            modelBuilder.Entity<Login>()
-                .Property(x => x.UserAgent)
-                .HasColumnName("USER_AGENT");
+            //modelBuilder.Entity<Login>()
+            //    .Property(x => x.UserAgent)
+            //    .HasColumnName("USER_AGENT");
 
-            modelBuilder.Entity<Login>()
-                .Property(x => x.IPAddress)
-                .HasColumnName("USER_IP");
+            //modelBuilder.Entity<Login>()
+            //    .Property(x => x.IPAddress)
+            //    .HasColumnName("USER_IP");
 
-            modelBuilder.Entity<Login>()
-                .HasOne(l => l.User)
-                .WithMany(u => u.Logins)
-                .HasForeignKey(l => l.IDUser)
-                .HasConstraintName("FK_es_tbLogins_IDes_tbUsers");
+            //modelBuilder.Entity<Login>()
+            //    .HasOne(l => l.User)
+            //    .WithMany(u => u.Logins)
+            //    .HasForeignKey(l => l.IDUser)
+            //    .HasConstraintName("FK_es_tbLogins_IDes_tbUsers");
             #endregion
             #region Message
             modelBuilder.Entity<Message>()
