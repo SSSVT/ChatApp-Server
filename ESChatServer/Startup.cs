@@ -47,6 +47,7 @@ namespace ESChatServer
                     };
                 });
 
+            services.AddCors();
             services.AddMvc(config =>
             {
                 //only allow authenticated users
