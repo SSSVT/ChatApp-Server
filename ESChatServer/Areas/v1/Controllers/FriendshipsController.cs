@@ -284,6 +284,85 @@ namespace ESChatServer.Areas.v1.Controllers
 
         #region HttpPut (Update)
         [HttpPut]
+        public IActionResult AcceptFriendship([FromRoute] Guid id)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                Friendship friendship = this._friendshipsRepository.Find(id);
+                if (friendship != null)
+                {
+                    string username = UserObtainer.GetCurrentUserUsername(this.User.Claims);
+                    User user = this._usersRepository.FindByUsername(username);
+
+                    if (user.ID == friendship.IDRecipient)
+                    {
+                        friendship.UTCAccepted = DateTime.UtcNow;
+                        this._friendshipsRepository.Update(friendship, true);
+                    }
+                    else
+                    {
+                        return Unauthorized();
+                    }
+                }
+                else
+                {
+                    return NotFound(id);
+                }
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                //TODO: SaveException
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+        [HttpPut]
+        public async Task<IActionResult> AcceptFriendshipAsync([FromRoute] Guid id)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                Friendship friendship = await this._friendshipsRepository.FindAsync(id);
+                if (friendship != null)
+                {
+                    string username = UserObtainer.GetCurrentUserUsername(this.User.Claims);
+                    User user = await this._usersRepository.FindByUsernameAsync(username);
+
+                    if (user.ID == friendship.IDRecipient)
+                    {
+                        friendship.UTCAccepted = DateTime.UtcNow;
+                        await this._friendshipsRepository.UpdateAsync(friendship, true);
+                    }
+                    else
+                    {
+                        return Unauthorized();
+                    }
+                }
+                else
+                {
+                    return NotFound(id);
+                }
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                //TODO: SaveException
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpPut]
         public IActionResult PutFriendship([FromRoute] Guid id, [FromBody] Friendship item)
         {
             try
