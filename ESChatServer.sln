@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESChatServer", "ESChatServer\ESChatServer.csproj", "{6DA8A03B-1335-48D0-9550-9C01346EB93D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ESChatServer", "ESChatServer\ESChatServer.csproj", "{6DA8A03B-1335-48D0-9550-9C01346EB93D}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{9FDC5FDF-60A3-40BE-A6DE-1FDB6C18C095}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{6DA8A03B-1335-48D0-9550-9C01346EB93D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6DA8A03B-1335-48D0-9550-9C01346EB93D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6DA8A03B-1335-48D0-9550-9C01346EB93D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FDC5FDF-60A3-40BE-A6DE-1FDB6C18C095}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FDC5FDF-60A3-40BE-A6DE-1FDB6C18C095}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FDC5FDF-60A3-40BE-A6DE-1FDB6C18C095}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FDC5FDF-60A3-40BE-A6DE-1FDB6C18C095}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
