@@ -103,29 +103,29 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
 
         public ICollection<Friendship> FindReceivedAndPendingByUserID(long id)
         {
-            return this._DatabaseContext.Friendships.Where(x => x.IDRecipient == id && x.UTCAccepted == null).ToList();
+            return this._DatabaseContext.Friendships.Where(x => x.IDRecipient == id && x.UTCAccepted == null).Include(x => x.Sender).ToList();
         }
         public async Task<ICollection<Friendship>> FindReceivedAndPendingByUserIDAsync(long id)
         {
-            return await this._DatabaseContext.Friendships.Where(x => x.IDRecipient == id && x.UTCAccepted == null).ToListAsync();
+            return await this._DatabaseContext.Friendships.Where(x => x.IDRecipient == id && x.UTCAccepted == null).Include(x => x.Sender).ToListAsync();
         }
 
         public ICollection<Friendship> FindAcceptedByUserID(long id)
         {
-            return this._DatabaseContext.Friendships.Where(x => (x.IDSender == id || x.IDRecipient == id) && x.UTCAccepted != null).ToList();
+            return this._DatabaseContext.Friendships.Where(x => (x.IDSender == id || x.IDRecipient == id) && x.UTCAccepted != null).Include(x => x.Sender).Include(x => x.Recipient).ToList();
         }
         public async Task<ICollection<Friendship>> FindAcceptedByUserIDAsync(long id)
         {
-            return await this._DatabaseContext.Friendships.Where(x => (x.IDSender == id || x.IDRecipient == id) && x.UTCAccepted != null).ToListAsync();
+            return await this._DatabaseContext.Friendships.Where(x => (x.IDSender == id || x.IDRecipient == id) && x.UTCAccepted != null).Include(x => x.Sender).Include(x => x.Recipient).ToListAsync();
         }
 
         public ICollection<Friendship> FindByUserID(long id)
         {
-            return this._DatabaseContext.Friendships.Where(x => x.IDSender == id || x.IDRecipient == id).ToList();
+            return this._DatabaseContext.Friendships.Where(x => x.IDSender == id || x.IDRecipient == id).Include(x => x.Sender).Include(x => x.Recipient).ToList();
         }
         public async Task<ICollection<Friendship>> FindByUserIDAsync(long id)
         {
-            return await this._DatabaseContext.Friendships.Where(x => x.IDSender == id || x.IDRecipient == id).ToListAsync();
+            return await this._DatabaseContext.Friendships.Where(x => x.IDSender == id || x.IDRecipient == id).Include(x => x.Sender).Include(x => x.Recipient).ToListAsync();
         }
 
         public bool IsFriend(long currentUserID, long otherUserID)
