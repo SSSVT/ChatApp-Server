@@ -42,8 +42,6 @@ namespace ESChatServer.Areas.v1.Models.Database.Entities
         public string Status { get; set; }
 
         #region Virtual
-        //[JsonIgnore]
-        //public virtual ICollection<Login> Logins { get; set; }
         [JsonIgnore]
         public virtual ICollection<Room> OwnedRooms { get; set; }
         [JsonIgnore]
