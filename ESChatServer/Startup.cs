@@ -41,7 +41,13 @@ namespace ESChatServer
                     };
                 });
 
-            services.AddCors();
+            services.AddCors(o => o.AddPolicy("CORSPolicy", builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            }));
+
             services.AddMvc(config =>
             {
                 //only allow authenticated users
@@ -62,7 +68,7 @@ namespace ESChatServer
             }
 
             app.UseAuthentication();
-            app.UseCors(builder => builder.WithOrigins("*"));
+            app.UseCors("CORSPolicy");
 
             app.UseMvc(routes => {
                 routes.MapRoute(
