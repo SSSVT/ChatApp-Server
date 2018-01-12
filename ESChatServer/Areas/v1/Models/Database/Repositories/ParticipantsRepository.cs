@@ -99,11 +99,11 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
 
         public ICollection<Participant> FindByRoomID(long id)
         {
-            return this._DatabaseContext.Participants.Where(x => x.IDRoom == id).ToList();
+            return this._DatabaseContext.Participants.Where(x => x.IDRoom == id).Include(x => x.User).ToList();
         }
         public async Task<ICollection<Participant>> FindByRoomIDAsync(long id)
         {
-            return await this._DatabaseContext.Participants.Where(x => x.IDRoom == id).ToListAsync();
+            return await this._DatabaseContext.Participants.Where(x => x.IDRoom == id).Include(x => x.User).ToListAsync();
         }
 
         public bool Exists(object id)
