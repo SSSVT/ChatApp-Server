@@ -18,7 +18,6 @@ namespace ESChatServer.Areas.v1.Models.Database.Entities
         #region Virtual
         [JsonIgnore]
         public virtual Room Room { get; set; }
-        [JsonIgnore]
         public virtual User User { get; set; }
         #endregion
     }
