@@ -87,10 +87,6 @@ namespace ESChatServer.Areas.v1.Controllers
                 }
 
                 ICollection<Message> messages = this._messagesRepository.FindByRoomID(id, lastMessageTime);
-                if (messages.Count == 0)
-                {
-                    return NotFound();
-                }
 
                 return Ok(messages);
             }
@@ -111,10 +107,6 @@ namespace ESChatServer.Areas.v1.Controllers
                 }
 
                 ICollection<Message> messages = await this._messagesRepository.FindByRoomIDAsync(id, lastMessageTime);
-                if (messages.Count == 0)
-                {
-                    return NotFound();
-                }
 
                 return Ok(messages);
             }
