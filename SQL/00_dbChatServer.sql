@@ -109,11 +109,10 @@ ALTER TABLE [es_tbPasswordResets] ADD CONSTRAINT CK_es_tbPasswordResets_ISSUED_U
 ALTER TABLE [es_tbPasswordResets] ADD CONSTRAINT CK_es_tbPasswordResets_EXPIRE_UTC CHECK (ISSUED_UTC < EXPIRE_UTC)
 
 /* FOREIGN KEYS */
---ALTER TABLE [es_tbLogins] ADD CONSTRAINT FK_es_tbLogins_IDes_tbUsers FOREIGN KEY (IDes_tbUsers) REFERENCES es_tbUsers(ID);
 ALTER TABLE [es_tbRooms] ADD CONSTRAINT FK_es_tbRooms_IDes_tbUsers FOREIGN KEY (IDes_tbUsers) REFERENCES es_tbUsers(ID);
-ALTER TABLE [es_tbRoomParticipants] ADD CONSTRAINT FK_es_tbRoomParticipants_IDes_tbRooms FOREIGN KEY (IDes_tbRooms) REFERENCES es_tbRooms(ID);
+ALTER TABLE [es_tbRoomParticipants] ADD CONSTRAINT FK_es_tbRoomParticipants_IDes_tbRooms FOREIGN KEY (IDes_tbRooms) REFERENCES es_tbRooms(ID) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE [es_tbRoomParticipants] ADD CONSTRAINT FK_es_tbRoomParticipants_IDes_tbUsers FOREIGN KEY (IDes_tbUsers) REFERENCES es_tbUsers(ID);
-ALTER TABLE [es_tbMessages] ADD CONSTRAINT FK_es_tbMessages_IDes_tbRooms FOREIGN KEY (IDes_tbRooms) REFERENCES es_tbRooms(ID);
+ALTER TABLE [es_tbMessages] ADD CONSTRAINT FK_es_tbMessages_IDes_tbRooms FOREIGN KEY (IDes_tbRooms) REFERENCES es_tbRooms(ID) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE [es_tbMessages] ADD CONSTRAINT FK_es_tbMessages_IDes_tbUsers FOREIGN KEY (IDes_tbUsers) REFERENCES es_tbUsers(ID);
 ALTER TABLE [es_tbFriendships] ADD CONSTRAINT FK_es_tbFriendships_IDes_tbUsers_SENDER FOREIGN KEY (IDes_tbUsers_SENDER) REFERENCES es_tbUsers(ID);
 ALTER TABLE [es_tbFriendships] ADD CONSTRAINT FK_es_tbFriendships_IDes_tbUsers_RECIPIENT FOREIGN KEY (IDes_tbUsers_RECIPIENT) REFERENCES es_tbUsers(ID);
