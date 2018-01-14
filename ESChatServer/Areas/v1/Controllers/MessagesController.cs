@@ -125,6 +125,7 @@ namespace ESChatServer.Areas.v1.Controllers
             try
             {
                 ModelState.Remove("ID");
+                ModelState.Remove("Sender");
                 if (!ModelState.IsValid)
                 {
                     return BadRequest(ModelState);
@@ -146,6 +147,7 @@ namespace ESChatServer.Areas.v1.Controllers
             try
             {
                 ModelState.Remove("ID");
+                ModelState.Remove("Sender");
                 if (!ModelState.IsValid)
                 {
                     return BadRequest(ModelState);
