@@ -13,7 +13,6 @@ namespace ESChatServer.Areas.v1.Models.Database
 
         #region DbSets
         public DbSet<Friendship> Friendships { get; set; }
-        //public DbSet<Login> Logins { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<Participant> Participants { get; set; }
         public DbSet<PasswordReset> PasswordResets { get; set; }
@@ -24,7 +23,6 @@ namespace ESChatServer.Areas.v1.Models.Database
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Friendship>().ToTable("es_tbFriendships");
-            //modelBuilder.Entity<Login>().ToTable("es_tbLogins");
             modelBuilder.Entity<Message>().ToTable("es_tbMessages");
             modelBuilder.Entity<Participant>().ToTable("es_tbRoomParticipants");
             modelBuilder.Entity<PasswordReset>().ToTable("es_tbPasswordResets");
@@ -137,6 +135,9 @@ namespace ESChatServer.Areas.v1.Models.Database
             modelBuilder.Entity<Message>()
                 .Property(x => x.Content)
                 .HasColumnName("CONTENT");
+
+            modelBuilder.Entity<Message>()
+                .Ignore(x => x.Sender);
 
             modelBuilder.Entity<Message>()
                 .HasOne(m => m.Owner)

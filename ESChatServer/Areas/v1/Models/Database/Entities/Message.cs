@@ -28,9 +28,13 @@ namespace ESChatServer.Areas.v1.Models.Database.Entities
         {
             get
             {
-                StringBuilder sb = new StringBuilder(192);
-                sb.AppendFormat("{0} {1}", this.Owner.FirstName, this.Owner.LastName);
-                return sb.ToString();
+                if (this.Owner != null)
+                {
+                    StringBuilder sb = new StringBuilder(192);
+                    sb.AppendFormat("{0} {1}", this.Owner.FirstName, this.Owner.LastName);
+                    return sb.ToString();
+                }
+                return null;
             }
         }
 
