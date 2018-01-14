@@ -104,11 +104,11 @@ namespace ESChatServer.Areas.v1.Models.Database.Repositories
 
         public ICollection<Message> FindByRoomID(long id, DateTime time)
         {
-            return this._DatabaseContext.Messages.Where(x => x.IDRoom == id && x.UTCServerReceived > time).ToList();
+            return this._DatabaseContext.Messages.Where(x => x.IDRoom == id && x.UTCServerReceived > time).Include(x => x.Owner).ToList();
         }
         public async Task<ICollection<Message>> FindByRoomIDAsync(long id, DateTime time)
         {
-            return await this._DatabaseContext.Messages.Where(x => x.IDRoom == id && x.UTCServerReceived > time).ToListAsync();
+            return await this._DatabaseContext.Messages.Where(x => x.IDRoom == id && x.UTCServerReceived > time).Include(x => x.Owner).ToListAsync();
         }
 
         public bool Exists(object id)

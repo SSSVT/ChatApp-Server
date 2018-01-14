@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Text;
 
 namespace ESChatServer.Areas.v1.Models.Database.Entities
 {
@@ -22,6 +23,16 @@ namespace ESChatServer.Areas.v1.Models.Database.Entities
 
         [Required]
         public string Content { get; set; }
+
+        public string Sender
+        {
+            get
+            {
+                StringBuilder sb = new StringBuilder(192);
+                sb.AppendFormat("{0} {1}", this.Owner.FirstName, this.Owner.LastName);
+                return sb.ToString();
+            }
+        }
 
         #region Virtual
         [JsonIgnore]
