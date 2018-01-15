@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  eschatserver:
+    image: eschatserver
+    build:
+      context: .
+      dockerfile: ESChatServer/Dockerfile
