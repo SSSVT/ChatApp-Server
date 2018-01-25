@@ -1,4 +1,5 @@
-﻿using ESChatServer.Areas.v1.Models.Database;
+﻿using ESChatServer.Areas.v1.Models.Application.Objects;
+using ESChatServer.Areas.v1.Models.Database;
 using ESChatServer.Areas.v1.Models.Database.Entities;
 using ESChatServer.Areas.v1.Models.Database.Interfaces;
 using ESChatServer.Areas.v1.Models.Database.Repositories;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace ESChatServer.Areas.v1.Controllers
 {
@@ -148,6 +150,30 @@ namespace ESChatServer.Areas.v1.Controllers
             }
         }
         #endregion
+
+        [HttpDelete]
+        public async Task<IActionResult> LeaveRoom([FromRoute] long id)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                string username = UserObtainer.GetCurrentUserUsername(this.User.Claims);
+                User user = this._usersRepository.FindByUsername(username);
+                Participant participant = (await this._participantsRepository.FindByRoomIDAsync(id)).Where(x => x.IDUser == user.ID).FirstOrDefault();
+                await this._participantsRepository.RemoveAsync(participant, true);
+
+                return Ok(participant);
+            }
+            catch (Exception)
+            {
+                //TODO: Save exception
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
 
         #region HttpPost (Create)
         [HttpPost]
